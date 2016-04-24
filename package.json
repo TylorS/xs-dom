@@ -47,7 +47,7 @@
     "test-ci": "npm run lint && npm run test-node && testem ci",
     "predist": "rm -rf dist/ && mkdirp dist/",
     "lib": "tsc",
-    "dist": "browserify -t babelify lib/index.js -o dist/xs-dom.js",
+    "dist": "browserify -t babelify lib/index.js --standalone xsDom -o dist/xs-dom.js",
     "postdist": "uglifyjs dist/xs-dom.js -o dist/xs-dom.min.js",
     "start": "npm install && npm prune",
     "postinstall": "typings install",
