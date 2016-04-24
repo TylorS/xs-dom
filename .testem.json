@@ -1,0 +1,18 @@
+{
+  "framework": "mocha",
+  "src_files": [
+    "test/index.js"
+  ],
+  "before_tests": "tsc test/browser/index.ts --outDir test/browser/build && browserify -t babelilfy test/browse/build/index.js -o test/bundle.js",
+  "serve_files": [
+    "test/bundle.js"
+  ],
+  "after_tests": "rm -rf test/browser/build && rm test/bundle.js",
+  "launch_in_ci": [
+    "firefox"
+  ],
+  "launch_in_dev": [
+    "chrome"
+  ],
+  "ignore_missing_launchers": true
+}
