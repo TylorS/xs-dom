@@ -1,7 +1,7 @@
 import * as api from './api/dom';
 import * as util from './util/index';
 
-import {VNode} from './VNode';
+import {VNode, createVNode} from './VNode';
 import {Module} from './Module';
 
 const hooks = ['create', 'update', 'remove', 'destroy', 'pre', 'post'];
@@ -26,14 +26,10 @@ function registerModules(modules: Array<Module>): Object {
 }
 
 function emptyVNodeAt(elm: Element): VNode {
-  return {
+  return createVNode({
     sel: api.tagName(elm).toLowerCase(),
-    data: {},
-    children: [],
-    text: void 0,
-    key: void 0,
-    elm
-  };
+    elm,
+  });
 }
 
 function createRemoveCallback(childElm: Element | Text, listeners: number) {
@@ -93,10 +89,10 @@ export function init(modules: Array<Module>) {
     return vNode.elm;
   }
 
-  function addVNodes(parentElm: Element, before: Element,
+  function addVNodes(parentElm: Element | Text, before: Element | Text,
                      vNodes: VNode[], startIdx: number,
-                     endIdx: number, insertedVNodeQueue: VNode[]) {
-    for (; startIdx < endIdx; ++startIdx) {
+                     endIdx: number = 0, insertedVNodeQueue: VNode[]) {
+    for (; startIdx <= endIdx; ++startIdx) {
       api.insertBefore(parentElm, createElement(vNodes[startIdx], insertedVNodeQueue), before);
     }
   }
@@ -120,7 +116,7 @@ export function init(modules: Array<Module>) {
   }
 
   function removeVNodes(parentElm: Element | Text, vNodes: VNode[],
-                        startIdx: number, endIdx: number) {
+                        startIdx: number, endIdx: number = 0) {
     for (; startIdx <= endIdx; ++startIdx) {
       let i: any;
       let listeners: number;
@@ -158,10 +154,11 @@ export function init(modules: Array<Module>) {
     let oldEndVNode: VNode = oldChildren[oldEndIdx];
     let newEndIdx = newChildren.length - 1;
     let newStartVNode: VNode = newChildren[0];
-    let newEndVNode: VNode = [newEndIdx];
+    let newEndVNode: VNode = newChildren[newEndIdx];
     let oldKeyToIdx: Object;
     let idxInOld: any;
     let elmToMove: VNode;
+    let before: Element | Text;
 
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (util.isUndef(oldStartVNode)) {
@@ -170,13 +167,14 @@ export function init(modules: Array<Module>) {
         oldEndVNode = oldChildren[--oldEndIdx];
       } else if (util.sameVNode(oldStartVNode, newStartVNode)) {
         patchVNode(oldStartVNode, newStartVNode, insertedVNodeQueue);
-        oldStartVNode = oldChildren[--oldEndIdx];
+        oldStartVNode = oldChildren[++oldStartIdx];
         newStartVNode = newChildren[++newStartIdx];
       } else if (util.sameVNode(oldEndVNode, newEndVNode)) {
         patchVNode(oldEndVNode, newEndVNode, insertedVNodeQueue);
         oldEndVNode = oldChildren[--oldEndIdx];
         newEndVNode = newChildren[--newEndIdx];
       } else if (util.sameVNode(oldStartVNode, newEndVNode)) { // VNode moved right
+        patchVNode(oldStartVNode, newEndVNode, insertedVNodeQueue);
         api.insertBefore(parentElm, oldStartVNode.elm, (<Element> api.nextSibling((<Element> oldEndVNode.elm))));
         oldStartVNode = oldChildren[++oldStartIdx];
         newEndVNode = newChildren[--newEndIdx];
@@ -202,6 +200,12 @@ export function init(modules: Array<Module>) {
         }
       }
     }
+    if (oldStartIdx > oldEndIdx) {
+      before = util.isUndef(newChildren[newEndIdx + 1]) ? null : newChildren[newEndIdx + 1].elm;
+      addVNodes(parentElm, before, newChildren, newStartIdx, newEndIdx, insertedVNodeQueue);
+    } else if (newStartIdx > newEndIdx) {
+      removeVNodes(parentElm, oldChildren, oldStartIdx, oldEndIdx);
+    }
   }
 
   function patchVNode(oldVNode: VNode, vNode: VNode, insertedVNodeQueue: VNode[]): void {
@@ -214,7 +218,10 @@ export function init(modules: Array<Module>) {
 
     let elm = vNode.elm = oldVNode.elm;
     const oldChildren = oldVNode.children;
-    const {children, data, text} = vNode;
+    const children = vNode.children;
+    const data = vNode.data;
+    const text = vNode.text;
+
     if (oldVNode === vNode) return;
     if (!util.sameVNode(oldVNode, vNode)) {
       const parentElm = api.parentNode(oldVNode.elm);
@@ -254,7 +261,7 @@ export function init(modules: Array<Module>) {
     }
   }
 
-  return function patch(oldVNode: VNode, vNode: VNode): VNode {
+  return function patch(oldVNode: VNode | Element, vNode: VNode): VNode {
     let i: number;
     let elm: Element | Text;
     let parent: Element | Text;
@@ -265,14 +272,14 @@ export function init(modules: Array<Module>) {
       fn.apply(context, []);
     }
 
-    if (util.isUndef(oldVNode.sel)) {
+    if (util.isUndef((<VNode> oldVNode).sel)) {
       oldVNode = emptyVNodeAt((<Element> oldVNode));
     }
 
     if (util.sameVNode(oldVNode, vNode)) {
       patchVNode(oldVNode, vNode, insertedVNodeQueue);
     } else {
-      elm = oldVNode.elm;
+      elm = (<VNode> oldVNode).elm;
       parent = api.parentNode(elm);
       createElement(vNode, insertedVNodeQueue);
 
@@ -290,6 +297,6 @@ export function init(modules: Array<Module>) {
       fn.apply(context, []);
     }
 
-    return vNode.elm;
+    return vNode;
   };
 }

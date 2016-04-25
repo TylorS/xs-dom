@@ -1,5 +1,5 @@
 import {Stream} from 'xstream';
-import {VNode, VNodeData} from '../VNode';
+import {createVNode, createTextVNode, VNode, VNodeData} from '../VNode';
 
 function isObservable(x: any): boolean {
   return typeof x.addListener === `function`;
@@ -24,7 +24,7 @@ function addNS(data: VNodeData, children: Array<VNode | string | Stream<VNode>>)
 }
 
 function h(sel: string, b?: any, c?: any): VNode {
-  let data = {};
+  let data: any = {};
   let children: Array<VNode | string | Stream<VNode>>;
   let text: string | number;
   let i: number;
@@ -47,14 +47,15 @@ function h(sel: string, b?: any, c?: any): VNode {
   if (Array.isArray(children)) {
     for (i = 0; i < children.length; ++i) {
       if (typeof children[i] === 'string' || typeof children[i] === 'number') {
-        children[i] = {text: children[i]}
+        children[i] = createTextVNode(children[i]);
       }
     }
   }
   if (sel[0] === 's' && sel[1] === 'v' && sel[2] === 'g') {
     addNS(data, children);
   }
-  return {sel, data, children, text};
+
+  return createVNode({sel, data, children, text});
 };
 
 export {h};

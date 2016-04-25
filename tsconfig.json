@@ -6,8 +6,7 @@
     "declaration": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
-    "module": "ES6",
-    "noEmitHelpers": true,
+    "module": "es2015",
     "target": "ES6",
     "outDir": "lib/"
   },
@@ -15,11 +14,11 @@
     "indentSize": 2,
     "tabSize": 2
   },
-  "files": [
-    "typings/main.d.ts",
-    "src/index.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+   "files": [
+     "typings/main.d.ts",
+     "src/index.ts"
+   ],
+   "exclude": [
+     "node_modules"
+   ]
 }

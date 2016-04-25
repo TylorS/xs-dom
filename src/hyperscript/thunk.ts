@@ -35,6 +35,6 @@ function prepatch(oldVNode: VNode, thunk: Thunk): void {
   copyToThunk(oldVNode, thunk);
 }
 
-export function thunk(selector: string, key: string | number, fn: () => VNode, args: Array<any>): VNode {
+export function thunk(selector: string, key: string | number, fn: (...args: any[]) => VNode, args: Array<any>): VNode {
   return h(selector, {key, hook: {init, prepatch}, fn, args}, []);
 }

@@ -3,7 +3,7 @@
   "src_files": [
     "test/index.js"
   ],
-  "before_tests": "tsc test/browser/index.ts --outDir test/browser/build && browserify -t babelilfy test/browse/build/index.js -o test/bundle.js",
+  "before_tests": "npm run build-browser-tests",
   "serve_files": [
     "test/bundle.js"
   ],

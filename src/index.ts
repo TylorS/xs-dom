@@ -1,3 +1,7 @@
+// TS Defs;
+export {VNode, VNodeData, Thunk, ThunkData} from './VNode';
+export {Module} from './Module';
+
 export {thunk} from './hyperscript/thunk';
 import {h} from './hyperscript/hyperscript';
 import hh from './hyperscript/hyperscript-helpers';

@@ -2,10 +2,13 @@ import {Stream} from 'xstream';
 import {Module} from './Module';
 
 export interface VNodeData {
+  // modules
   props?: Object;
   attrs?: Object;
   class?: Object;
   style?: Object;
+  dataset?: Object;
+  // end of modules
   hook?: Module;
   key?: string | number;
   ns?: string; // for SVGs
@@ -31,4 +34,24 @@ export interface ThunkData extends VNodeData {
 
 export interface Thunk extends VNode {
   data: ThunkData;
+}
+
+export function createVNode({
+  sel,
+  data = {},
+  children = void 0,
+  elm = void 0,
+  text = void 0,
+}): VNode {
+  const key = data === void 0 ? void 0 : (<any> data).key;
+  return {sel, data, children, elm, text, key};
+}
+
+export function createTextVNode(text: string): VNode {
+  return createVNode({
+    sel: void 0,
+    data: void 0,
+    children: void 0,
+    text,
+  });
 }

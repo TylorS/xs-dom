@@ -6,7 +6,7 @@ export function parseSelector(selector = ``) {
   let id: string = ``;
   let classes: Array<string> = [];
 
-  let tagParts = selector.split(classIdSplit)
+  let tagParts = selector.split(classIdSplit);
 
   if (notClassId.test(tagParts[1]) || selector === ``) {
     tagName = `div`;
@@ -38,5 +38,5 @@ export function parseSelector(selector = ``) {
     tagName,
     id,
     className: classes.join(` `),
-  }
+  };
 }
