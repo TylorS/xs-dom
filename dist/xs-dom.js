@@ -4,6 +4,38 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.createVNode = createVNode;
+exports.createTextVNode = createTextVNode;
+function createVNode(_ref) {
+    var sel = _ref.sel;
+    var _ref$data = _ref.data;
+    var data = _ref$data === undefined ? {} : _ref$data;
+    var _ref$children = _ref.children;
+    var children = _ref$children === undefined ? void 0 : _ref$children;
+    var _ref$elm = _ref.elm;
+    var elm = _ref$elm === undefined ? void 0 : _ref$elm;
+    var _ref$text = _ref.text;
+    var text = _ref$text === undefined ? void 0 : _ref$text;
+
+    var key = data === void 0 ? void 0 : data.key;
+    return { sel: sel, data: data, children: children, elm: elm, text: text, key: key };
+}
+function createTextVNode(text) {
+    return createVNode({
+        sel: void 0,
+        data: void 0,
+        children: void 0,
+        text: text
+    });
+}
+
+
+},{}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.createElement = createElement;
 exports.createElementNS = createElementNS;
 exports.createTextNode = createTextNode;
@@ -46,7 +78,7 @@ function setTextContent(node, text) {
 }
 
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -88,12 +120,16 @@ TAG_NAMES.forEach(function (n) {
 exports.default = exported;
 
 
-},{"./hyperscript":3}],3:[function(require,module,exports){
+},{"./hyperscript":4}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.h = undefined;
+
+var _VNode = require('../VNode');
+
 function isObservable(x) {
     return typeof x.addListener === 'function';
 }
@@ -137,20 +173,20 @@ function h(sel, b, c) {
     if (Array.isArray(children)) {
         for (i = 0; i < children.length; ++i) {
             if (typeof children[i] === 'string' || typeof children[i] === 'number') {
-                children[i] = { text: children[i] };
+                children[i] = (0, _VNode.createTextVNode)(children[i]);
             }
         }
     }
     if (sel[0] === 's' && sel[1] === 'v' && sel[2] === 'g') {
         addNS(data, children);
     }
-    return { sel: sel, data: data, children: children, text: text };
+    return (0, _VNode.createVNode)({ sel: sel, data: data, children: children, text: text });
 }
 ;
 exports.h = h;
 
 
-},{}],4:[function(require,module,exports){
+},{"../VNode":1}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -195,7 +231,7 @@ function thunk(selector, key, fn, args) {
 }
 
 
-},{"./hyperscript":3}],5:[function(require,module,exports){
+},{"./hyperscript":4}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -436,7 +472,7 @@ exports.ul = ul;
 
 exports.video = video;
 
-},{"./hyperscript/hyperscript":3,"./hyperscript/hyperscript-helpers":2,"./hyperscript/thunk":4,"./xs-dom":8}],6:[function(require,module,exports){
+},{"./hyperscript/hyperscript":4,"./hyperscript/hyperscript-helpers":3,"./hyperscript/thunk":5,"./xs-dom":9}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -479,7 +515,7 @@ function createKeyToOldIdx(children, beginIdx, endIdx) {
 }
 
 
-},{"./parseSelector":7}],7:[function(require,module,exports){
+},{"./parseSelector":8}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -523,7 +559,7 @@ function parseSelector() {
 }
 
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -538,6 +574,8 @@ var api = _interopRequireWildcard(_dom);
 var _index = require('./util/index');
 
 var util = _interopRequireWildcard(_index);
+
+var _VNode = require('./VNode');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -557,14 +595,10 @@ function registerModules(modules) {
     return callbacks;
 }
 function emptyVNodeAt(elm) {
-    return {
+    return (0, _VNode.createVNode)({
         sel: api.tagName(elm).toLowerCase(),
-        data: {},
-        children: [],
-        text: void 0,
-        key: void 0,
         elm: elm
-    };
+    });
 }
 function createRemoveCallback(childElm, listeners) {
     return function () {
@@ -632,8 +666,11 @@ function init(modules) {
         }
         return vNode.elm;
     }
-    function addVNodes(parentElm, before, vNodes, startIdx, endIdx, insertedVNodeQueue) {
-        for (; startIdx < endIdx; ++startIdx) {
+    function addVNodes(parentElm, before, vNodes, startIdx) {
+        var endIdx = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
+        var insertedVNodeQueue = arguments[5];
+
+        for (; startIdx <= endIdx; ++startIdx) {
             api.insertBefore(parentElm, createElement(vNodes[startIdx], insertedVNodeQueue), before);
         }
     }
@@ -659,7 +696,9 @@ function init(modules) {
             }
         }
     }
-    function removeVNodes(parentElm, vNodes, startIdx, endIdx) {
+    function removeVNodes(parentElm, vNodes, startIdx) {
+        var endIdx = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+
         for (; startIdx <= endIdx; ++startIdx) {
             var i = void 0;
             var listeners = void 0;
@@ -696,10 +735,11 @@ function init(modules) {
         var oldEndVNode = oldChildren[oldEndIdx];
         var newEndIdx = newChildren.length - 1;
         var newStartVNode = newChildren[0];
-        var newEndVNode = [newEndIdx];
+        var newEndVNode = newChildren[newEndIdx];
         var oldKeyToIdx = void 0;
         var idxInOld = void 0;
         var elmToMove = void 0;
+        var before = void 0;
         while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
             if (util.isUndef(oldStartVNode)) {
                 oldStartVNode = oldChildren[++oldStartIdx]; // VNode has been moved left;
@@ -707,13 +747,14 @@ function init(modules) {
                     oldEndVNode = oldChildren[--oldEndIdx];
                 } else if (util.sameVNode(oldStartVNode, newStartVNode)) {
                     patchVNode(oldStartVNode, newStartVNode, insertedVNodeQueue);
-                    oldStartVNode = oldChildren[--oldEndIdx];
+                    oldStartVNode = oldChildren[++oldStartIdx];
                     newStartVNode = newChildren[++newStartIdx];
                 } else if (util.sameVNode(oldEndVNode, newEndVNode)) {
                     patchVNode(oldEndVNode, newEndVNode, insertedVNodeQueue);
                     oldEndVNode = oldChildren[--oldEndIdx];
                     newEndVNode = newChildren[--newEndIdx];
                 } else if (util.sameVNode(oldStartVNode, newEndVNode)) {
+                    patchVNode(oldStartVNode, newEndVNode, insertedVNodeQueue);
                     api.insertBefore(parentElm, oldStartVNode.elm, api.nextSibling(oldEndVNode.elm));
                     oldStartVNode = oldChildren[++oldStartIdx];
                     newEndVNode = newChildren[--newEndIdx];
@@ -739,6 +780,12 @@ function init(modules) {
                     }
                 }
         }
+        if (oldStartIdx > oldEndIdx) {
+            before = util.isUndef(newChildren[newEndIdx + 1]) ? null : newChildren[newEndIdx + 1].elm;
+            addVNodes(parentElm, before, newChildren, newStartIdx, newEndIdx, insertedVNodeQueue);
+        } else if (newStartIdx > newEndIdx) {
+            removeVNodes(parentElm, oldChildren, oldStartIdx, oldEndIdx);
+        }
     }
     function patchVNode(oldVNode, vNode, insertedVNodeQueue) {
         var i = void 0;
@@ -751,7 +798,6 @@ function init(modules) {
         var children = vNode.children;
         var data = vNode.data;
         var text = vNode.text;
-
         if (oldVNode === vNode) return;
         if (!util.sameVNode(oldVNode, vNode)) {
             var parentElm = api.parentNode(oldVNode.elm);
@@ -829,10 +875,10 @@ function init(modules) {
 
             fn.apply(context, []);
         }
-        return vNode.elm;
+        return vNode;
     };
 }
 
 
-},{"./api/dom":1,"./util/index":6}]},{},[5])(5)
+},{"./VNode":1,"./api/dom":2,"./util/index":7}]},{},[6])(6)
 });
