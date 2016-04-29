@@ -47,18 +47,16 @@ export function init(modules: Array<Module>) {
   function createElement(vNode: VNode, insertedVNodeQueue: Array<VNode>): Element | Text {
     let i: any;
     let elm: Element | Text;
-    let {sel, data} = vNode;
 
-    if (util.isDef(data)) {
-      if (util.isDef(i = data.hook) && util.isDef(i = i.init)) {
+    if (util.isDef(vNode.data)) {
+      if (util.isDef(i = vNode.data.hook) && util.isDef(i = i.init)) {
         i(vNode);
-        data = vNode.data;
       }
     }
 
-    if (util.isDef(sel)) {
-      const {tagName, id, className} = util.parseSelector(sel);
-      elm = vNode.elm = util.isDef(data) && util.isDef(i = data.ns)
+    if (util.isDef(vNode.sel)) {
+      const {tagName, id, className} = util.parseSelector(vNode.sel);
+      elm = vNode.elm = util.isDef(vNode.data) && util.isDef(i = vNode.data.ns)
         ? api.createElementNS(i, tagName)
         : api.createElement(tagName);
 
