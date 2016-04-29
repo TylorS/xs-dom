@@ -2,39 +2,46 @@ import {VNode, Thunk, ThunkData} from '../VNode';
 
 import {h} from './hyperscript';
 
-function copyToThunk(vNode: VNode, thunk: Thunk) {
-  thunk.elm = vNode.elm;
-  vNode.data.fn = thunk.data.fn;
-  vNode.data.args = thunk.data.args;
-  thunk.data = (<ThunkData> vNode.data);
-  thunk.children = vNode.children;
-  thunk.text = vNode.text;
-  thunk.elm = vNode.elm;
+function copyToThunk(vnode: VNode, thunk: Thunk) {
+  thunk.elm = vnode.elm;
+  vnode.data.fn = thunk.data.fn;
+  vnode.data.args = thunk.data.args;
+  thunk.data = (<ThunkData> vnode.data);
+  thunk.children = vnode.children;
+  thunk.text = vnode.text;
+  thunk.elm = vnode.elm;
 }
 
 function init(thunk: Thunk) {
-  const data = thunk.data;
-  const vNode = data.fn.apply(void 0, data.args);
+  const cur = thunk.data;
+  const vNode = cur.fn.apply(undefined, cur.args);
   copyToThunk(vNode, thunk);
 }
 
-function prepatch(oldVNode: VNode, thunk: Thunk): void {
-  const old = oldVNode.data;
-  const cur = thunk.data;
-  const oldArgs = old.args;
-  const args = cur.args;
+function prepatch(oldVnode: VNode, thunk: Thunk) {
+  let old = oldVnode.data;
+  let cur = thunk.data;
+  let oldArgs = old.args;
+  let args = cur.args;
+
   if (old.fn !== cur.fn || oldArgs.length !== args.length) {
-    copyToThunk(cur.fn.apply(void 0, args), thunk);
+    copyToThunk(cur.fn.apply(undefined, args), thunk);
   }
   for (let i = 0; i < args.length; ++i) {
     if (oldArgs[i] !== args[i]) {
-      copyToThunk(cur.fn.apply(void 0, args), thunk);
+      copyToThunk(cur.fn.apply(undefined, args), thunk);
       return;
     }
   }
-  copyToThunk(oldVNode, thunk);
+  copyToThunk(oldVnode, thunk);
 }
 
-export function thunk(selector: string, key: string | number, fn: (...args: any[]) => VNode, args: Array<any>): VNode {
-  return h(selector, {key, hook: {init, prepatch}, fn, args}, []);
-}
+export function thunk(sel: string, key: string | number,
+                      fn: (...args: Array<any>) => VNode, ...args: Array<any>) {
+  return h(sel, {
+    key: key,
+    hook: {init: init, prepatch: prepatch},
+    fn: fn,
+    args: args
+  });
+};

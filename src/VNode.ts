@@ -42,7 +42,7 @@ export function createVNode({
   children = void 0,
   elm = void 0,
   text = void 0,
-}): VNode {
+}: VNode): VNode {
   const key = data === void 0 ? void 0 : (<any> data).key;
   return {sel, data, children, elm, text, key};
 }

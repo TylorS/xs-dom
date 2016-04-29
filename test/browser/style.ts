@@ -13,10 +13,16 @@ describe('style', function() {
     elm = document.createElement('div');
     vnode0 = elm;
   });
+
+  after(() => {
+    fakeRaf.restore();
+  });
+
   it('is being styled', function() {
     elm = patch(vnode0, h('div', {style: {fontSize: '12px'}})).elm;
     assert.equal(elm.style.fontSize, '12px');
   });
+
   it('updates styles', function() {
     let vnode1 = h('i', {style: {fontSize: '14px', display: 'inline'}});
     let vnode2 = h('i', {style: {fontSize: '12px', display: 'block'}});
@@ -31,6 +37,7 @@ describe('style', function() {
     assert.equal(elm.style.fontSize, '10px');
     assert.equal(elm.style.display, 'block');
   });
+
   it('explicialy removes styles', function() {
     let vnode1 = h('i', {style: {fontSize: '14px'}});
     let vnode2 = h('i', {style: {fontSize: ''}});
@@ -42,6 +49,7 @@ describe('style', function() {
     patch(vnode2, vnode3);
     assert.equal(elm.style.fontSize, '10px');
   });
+
   it('implicially removes styles from element', function() {
     let vnode1 = h('div', [h('i', {style: {fontSize: '14px'}})]);
     let vnode2 = h('div', [h('i')]);
@@ -53,6 +61,7 @@ describe('style', function() {
     patch(vnode2, vnode3);
     assert.equal(elm.firstChild.style.fontSize, '10px');
   });
+
   it('updates delayed styles in next frame', function() {
     let patch = init([
       styleModule
@@ -71,5 +80,3 @@ describe('style', function() {
     assert.equal(elm.style.fontSize, '20px');
   });
 });
-
-fakeRaf.restore();

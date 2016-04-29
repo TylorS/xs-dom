@@ -471,7 +471,6 @@ describe('XS-DOM', function() {
         assert.deepEqual(map(prop('textContent'), elm.childNodes), ['One', 'Two']);
         patch(vnode1, vnode2);
         assert.equal(elm.childNodes.length, 1);
-        console.log(elm.childNodes);
         assert.equal(elm.childNodes[0].tagName, 'DIV');
         assert.equal(elm.childNodes[0].textContent, 'Three');
       });
@@ -584,8 +583,6 @@ describe('XS-DOM', function() {
         let result2 = [];
         function cb(result, oldVnode, vnode) {
           if (result.length > 0) {
-            console.log(result[result.length-1]);
-            console.log(oldVnode);
             assert.strictEqual(result[result.length-1], oldVnode);
           }
           result.push(vnode);

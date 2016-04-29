@@ -47,7 +47,7 @@ export function init(modules: Array<Module>) {
   function createElement(vNode: VNode, insertedVNodeQueue: Array<VNode>): Element | Text {
     let i: any;
     let elm: Element | Text;
-    let {sel, children, text, data} = vNode;
+    let {sel, data} = vNode;
 
     if (util.isDef(data)) {
       if (util.isDef(i = data.hook) && util.isDef(i = i.init)) {
@@ -65,12 +65,12 @@ export function init(modules: Array<Module>) {
       if (id) { (<Element> elm).id = id; }
       if (className) { (<Element> elm).className = className; }
 
-      if (Array.isArray(children)) {
-        for (i = 0; i < children.length; ++i) {
-          api.appendChild((<Element> elm), createElement(children[i], insertedVNodeQueue));
+      if (Array.isArray(vNode.children)) {
+        for (i = 0; i < vNode.children.length; ++i) {
+          api.appendChild((<Element> elm), createElement(vNode.children[i], insertedVNodeQueue));
         }
-      } else if (typeof text === 'string' || typeof text === 'number') {
-        api.appendChild((<Element> elm), api.createTextNode((<string> text)));
+      } else if (typeof vNode.text === 'string' || typeof vNode.text === 'number') {
+        api.appendChild((<Element> elm), api.createTextNode((<string> vNode.text)));
       }
 
       for (i = 0; i < (<any> callbacks).create.length; ++i) {
@@ -84,7 +84,7 @@ export function init(modules: Array<Module>) {
         if (i.insert) { insertedVNodeQueue.push(vNode); }
       }
     } else {
-      elm = vNode.elm = api.createTextNode((<string> text));
+      elm = vNode.elm = api.createTextNode((<string> vNode.text));
     }
     return vNode.elm;
   }
@@ -100,7 +100,8 @@ export function init(modules: Array<Module>) {
   function invokeDestroyHook(vNode: VNode): void {
     let i: any;
     let j: number;
-    const {data, children} = vNode;
+    const {sel, data} = vNode;
+    if (sel === void 0) { return; }
     if (util.isDef(i = data.hook) && util.isDef(i = i.destroy)) {
       i(vNode);
     }
@@ -108,9 +109,9 @@ export function init(modules: Array<Module>) {
       const {context, fn} = (<any> callbacks).destroy[i];
       fn.apply(context, [vNode]);
     }
-    if (util.isDef(i = children)) {
-      for (j = 0; j < children.length; ++j) {
-        invokeDestroyHook(children[j]);
+    if (util.isDef(i = vNode.children)) {
+      for (j = 0; j < i.length; ++j) {
+        invokeDestroyHook(i[j]);
       }
     }
   }
@@ -219,8 +220,6 @@ export function init(modules: Array<Module>) {
     let elm = vNode.elm = oldVNode.elm;
     const oldChildren = oldVNode.children;
     const children = vNode.children;
-    const data = vNode.data;
-    const text = vNode.text;
 
     if (oldVNode === vNode) return;
     if (!util.sameVNode(oldVNode, vNode)) {
@@ -230,17 +229,17 @@ export function init(modules: Array<Module>) {
       removeVNodes(parentElm, [oldVNode], 0, 0);
       return;
     }
-    if (util.isDef(data)) {
+    if (util.isDef(vNode.data)) {
       for (i = 0; i < (<any> callbacks).update.length; ++ i) {
         const {context, fn} = (<any> callbacks).update[i];
         fn.apply(context, [oldVNode, vNode]);
       }
-      i = data.hook;
+      i = vNode.data.hook;
       if (util.isDef(i) && util.isDef(i = i.update)) {
         i(oldVNode, vNode);
       }
     }
-    if (util.isUndef(text)) {
+    if (util.isUndef(vNode.text)) {
       if (util.isDef(oldChildren) && util.isDef(children)) {
         if (oldChildren !== children) {
           updateChildren(elm, oldChildren, children, insertedVNodeQueue);
@@ -249,7 +248,7 @@ export function init(modules: Array<Module>) {
         if (util.isDef(oldVNode.text)) api.setTextContent(elm, '');
         addVNodes((<Element> elm), null, children, 0, children.length - 1, insertedVNodeQueue);
       } else if (util.isDef(oldChildren)) {
-        removeVNodes(elm, oldChildren, 0, children.length - 1);
+        removeVNodes(elm, oldChildren, 0, oldChildren.length - 1);
       } else if (util.isDef(oldVNode.text)) {
         api.setTextContent(elm, '');
       }
@@ -281,7 +280,7 @@ export function init(modules: Array<Module>) {
     } else {
       elm = (<VNode> oldVNode).elm;
       parent = api.parentNode(elm);
-      createElement(vNode, insertedVNodeQueue);
+      vNode.elm = createElement(vNode, insertedVNodeQueue);
 
       if (parent !== null) {
         api.insertBefore(parent, vNode.elm, (<Element> api.nextSibling(elm)));
