@@ -7,9 +7,8 @@ describe('hooks', function() {
   let xsdom;
   let elm;
   beforeEach(function() {
-    xsdom = new XSDOM([props]);
     elm = document.createElement('div');
-    xsdom.setRootElement(elm);
+    xsdom = new XSDOM([props], elm);
   });
 
   describe('element hooks', function() {
@@ -188,8 +187,7 @@ describe('hooks', function() {
       let xsdom = new XSDOM([
         {remove: function(_, rm) { rm1 = rm; }},
         {remove: function(_, rm) { rm2 = rm; }},
-      ]);
-      xsdom.setRootElement(document.createElement('div'));
+      ], document.createElement('div'));
       let vnode1 = h('div', [h('a', {hook: {remove: function(_, rm) { rm3 = rm; }}})]);
       let vnode2 = h('div', []);
       elm = xsdom.patch(vnode1).elm;
@@ -206,15 +204,16 @@ describe('hooks', function() {
 
     it('invokes remove hook on replaced root', function() {
       let result = [];
-      const xsdom = new XSDOM([]);
       let parent = document.createElement('div');
       let element = document.createElement('div');
       parent.appendChild(element);
-      xsdom.setRootElement(element);
+      const xsdom = new XSDOM([], element);
+
       function cb(vnode, rm) {
         result.push(vnode);
         rm();
       }
+
       let vnode1 = h('div', {hook: {remove: cb}}, [
         h('b', 'Child 1'),
         h('i', 'Child 2'),
@@ -235,8 +234,7 @@ describe('hooks', function() {
       let xsdom = new XSDOM([
         {pre: function() { result.push('pre'); }},
         {post: function() { result.push('post'); }},
-      ]);
-      xsdom.setRootElement(document.createElement('div'));
+      ], document.createElement('div'));
       let vnode1 = h('div');
       xsdom.patch(vnode1);
       assert.deepEqual(result, ['pre', 'post']);
@@ -273,8 +271,7 @@ describe('hooks', function() {
       let xsdom = new XSDOM([
         {create: function() { created++; }},
         {destroy: function() { destroyed++; }},
-      ]);
-      xsdom.setRootElement(document.createElement('div'));
+      ], document.createElement('div'));
       let vnode1 = h('div', [
         h('span', 'First sibling'),
         h('div', [
@@ -295,8 +292,7 @@ describe('hooks', function() {
       let xsdom = new XSDOM([
         {create: function() { created++; }},
         {remove: function() { removed++; }},
-      ]);
-      xsdom.setRootElement(document.createElement('div'));
+      ], document.createElement('div'));
       let vnode1 = h('div', [
         h('span', 'First child'),
         '',
@@ -314,8 +310,7 @@ describe('hooks', function() {
       let xsdom = new XSDOM([
         {create: function() { created++; }},
         {destroy: function() { destroyed++; }},
-      ]);
-      xsdom.setRootElement(document.createElement('div'));
+      ], document.createElement('div'));
       let vnode1 = h('div', [
         h('span', 'First sibling'),
         h('div', [

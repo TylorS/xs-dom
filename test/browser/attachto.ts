@@ -7,8 +7,8 @@ describe('attachTo', function() {
   let xsdom;
   let elm;
   beforeEach(function() {
-    xsdom = new XSDOM([]);
     elm = document.createElement('div');
+    xsdom = new XSDOM([], elm);
   });
   it('adds element to target', function() {
     const vnode1 = h('div', [
@@ -17,7 +17,6 @@ describe('attachTo', function() {
          attachTo(elm, h('div#attached', 'Test')),
        ]),
     ]);
-    xsdom.setRootElement(elm);
     elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.children.length, 2);
   });
@@ -34,7 +33,6 @@ describe('attachTo', function() {
         attachTo(elm, h('div#attached', 'New text')),
       ]),
     ]);
-    xsdom.setRootElement(elm);
     elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.children[0].innerHTML, 'First text');
     elm = xsdom.patch(vnode2).elm;
@@ -54,7 +52,6 @@ describe('attachTo', function() {
         attachTo(elm, h('div#attached', 'Text')),
       ]),
     ]);
-    xsdom.setRootElement(elm);
     elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.children[0].innerHTML, 'Text');
     elm = xsdom.patch(vnode2).elm;
@@ -72,7 +69,6 @@ describe('attachTo', function() {
         h('div', 'Some element'),
       ]),
     ]);
-    xsdom.setRootElement(elm);
     elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.children[0].innerHTML, 'First text');
     elm = xsdom.patch(vnode2).elm;
@@ -95,7 +91,6 @@ describe('attachTo', function() {
         h('div', 'Some element'),
       ]),
     ]);
-    xsdom.setRootElement(elm);
     elm = xsdom.patch(vnode1).elm;
     elm = xsdom.patch(vnode2).elm;
   });

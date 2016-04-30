@@ -38,9 +38,8 @@ describe('updating children with keys', function() {
   let xsdom;
   let elm;
   beforeEach(function() {
-    xsdom = new XSDOM([props, klass]);
     elm = document.createElement('div');
-    xsdom.setRootElement(elm);
+    xsdom = new XSDOM([props, klass], elm);
   });
 
   describe('addition of elements', function() {
@@ -265,10 +264,9 @@ describe('updating children with keys', function() {
       let vnode1 = h('span', arr.map(function(n) {
         return spanNumWithOpacity(n, '1');
       }));
-      const xsdom = new XSDOM([]);
       elm = (<HTMLElement> document.createElement('div'));
+      const xsdom = new XSDOM([], elm);
       let shufArr = shuffle(arr.slice(0));
-      xsdom.setRootElement(elm);
       elm = xsdom.patch(vnode1).elm;
       for (let i = 0; i < elms; ++i) {
         assert.equal(elm.children[i].innerHTML, i.toString());

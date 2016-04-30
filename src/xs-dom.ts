@@ -21,15 +21,12 @@ export class XSDOM {
   private vNodePatcher: VNodePatcher;
   private oldVNode: VNode;
 
-  constructor (modules: Array<Module>) {
+  constructor (modules: Array<Module>, rootElement: Element) {
+    this.oldVNode = emptyVNodeAt(rootElement);
     this.insertedVNodeQueue = [];
     this.callbacks = new Callbacks(modules);
     this.elementCreator = new ElementCreator(this.insertedVNodeQueue, this.callbacks);
-    this.vNodePatcher = new VNodePatcher(this.elementCreator, this.callbacks, this.insertedVNodeQueue);
-  }
-
-  public setRootElement (element: Element) {
-    this.oldVNode = emptyVNodeAt(element);
+    this.vNodePatcher = new VNodePatcher(this.elementCreator, this.callbacks);
   }
 
   public patch (vNode: VNode) {

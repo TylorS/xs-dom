@@ -13,7 +13,7 @@ describe('hyperscript', () => {
     assert.equal(vnode.sel, 'div');
     assert.equal((<VNode> vnode.children[0]).sel, 'span#hello');
     assert.equal((<VNode> vnode.children[1]).sel, 'b.world');
-  })
+  });
 
   it('can create vnode with text content', function() {
     let vnode = h('a', ['I am a string']);
@@ -29,4 +29,4 @@ describe('hyperscript', () => {
     let vnode = h('a', {}, 'I am a string');
     assert.equal(vnode.text, 'I am a string');
   });
-})
+});

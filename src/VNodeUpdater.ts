@@ -27,7 +27,7 @@ export class VNodeUpdater {
     let idxInOld: number; // index of a *new* vNode in the oldChildren array
 
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
-      if (isUndef(oldStartVNode)) { // vNode as moved up in the vTree
+      if (isUndef(oldStartVNode)) { // vNode has moved up in the vTree
         oldStartVNode = oldChildren[++oldStartIdx];
       } else if (isUndef(oldEndVNode)) {
         oldEndVNode = oldChildren[--oldEndIdx];

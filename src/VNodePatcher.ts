@@ -15,8 +15,7 @@ const pluckDestroy = pluck('hook', 'destroy');
 export class VNodePatcher {
   private vNodeUpdater: VNodeUpdater;
   constructor(private elementCreator: ElementCreator,
-              private callbacks: Callbacks,
-              insertedVNodeQueue: VNode[]) {
+              private callbacks: Callbacks) {
     this.vNodeUpdater = new VNodeUpdater(this);
   }
 

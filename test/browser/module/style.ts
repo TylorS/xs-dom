@@ -9,9 +9,8 @@ fakeRaf.use();
 describe('style', function() {
   let xsdom, elm;
   beforeEach(function() {
-    xsdom = new XSDOM([styleModule]);
     elm = document.createElement('div');
-    xsdom.setRootElement(elm);
+    xsdom = new XSDOM([styleModule], elm);
   });
 
   after(() => {

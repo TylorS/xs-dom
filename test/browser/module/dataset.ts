@@ -10,9 +10,8 @@ describe('dataset', function() {
   let xsdom;
   let elm;
   beforeEach(function() {
-    xsdom = new XSDOM([dataset]);
     elm = document.createElement('div');
-    xsdom.setRootElement(elm);
+    xsdom = new XSDOM([dataset], elm);
   });
   it('is set on initial element creation', function() {
     elm = xsdom.patch(h('div', {dataset: {foo: 'foo'}})).elm;

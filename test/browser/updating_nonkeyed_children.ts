@@ -24,9 +24,8 @@ describe('updating children without keys', function() {
   let xsdom;
   let elm;
   beforeEach(function() {
-    xsdom = new XSDOM([props, klass]);
     elm = document.createElement('div');
-    xsdom.setRootElement(elm);
+    xsdom = new XSDOM([props, klass], elm);
   });
 
   it('appends elements', function() {

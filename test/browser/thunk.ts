@@ -6,9 +6,8 @@ describe('thunk', function() {
   let xsdom;
   let elm;
   beforeEach(function() {
-    xsdom = new XSDOM([]);
     elm = document.createElement('div');
-    xsdom.setRootElement(elm);
+    xsdom = new XSDOM([], elm);
   });
   it('returns vnode with data and render function', function() {
     function numberInSpan(n) {
