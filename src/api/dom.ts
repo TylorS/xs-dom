@@ -17,6 +17,7 @@ export function insertBefore(parentNode: Element | Text,
 }
 
 export function removeChild(node: Element | Text, child: Element | Text): void {
+  if (node === void 0) { return; }
   node.removeChild(child);
 }
 

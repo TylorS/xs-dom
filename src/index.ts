@@ -4,8 +4,8 @@ export {Module} from './Module';
 
 export {thunk} from './hyperscript/thunk';
 import {h} from './hyperscript/hyperscript';
-import hh from './hyperscript/hyperscript-helpers';
 
+import hh from './hyperscript/hyperscript-helpers';
 const {
   a, abbr, address, area, article, aside, audio, b, base,
   bdi, bdo, blockquote, body, br, button, canvas, caption,
@@ -16,7 +16,7 @@ const {
   li, link, main, map, mark, menu, meta, nav, noscript,
   object, ol, optgroup, option, p, param, pre, q, rp, rt,
   ruby, s, samp, script, section, select, small, source, span,
-  strong, style, sub, sup, svg, table, tbody, td, textarea,
+  strong, style, sub, sup, table, tbody, td, textarea,
   tfoot, th, thead, title, tr, u, ul, video,
 } = hh;
 
@@ -30,8 +30,11 @@ export {h,
   li, link, main, map, mark, menu, meta, nav, noscript,
   object, ol, optgroup, option, p, param, pre, q, rp, rt,
   ruby, s, samp, script, section, select, small, source, span,
-  strong, style, sub, sup, svg, table, tbody, td, textarea,
+  strong, style, sub, sup, table, tbody, td, textarea,
   tfoot, th, thead, title, tr, u, ul, video,
 };
 
-export * from './xs-dom';
+import svg from './hyperscript/svg-helpers';
+export {svg};
+
+export {XSDOM as default} from './xs-dom';

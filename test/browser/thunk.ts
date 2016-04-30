@@ -1,12 +1,14 @@
 import * as assert from 'assert';
 
-import {init, h, thunk} from '../../src/index';
-let patch = init([]);
+import XSDOM, {h, thunk} from '../../src/index';
 
 describe('thunk', function() {
-  let elm, vnode0;
+  let xsdom;
+  let elm;
   beforeEach(function() {
-    elm = vnode0 = document.createElement('div');
+    xsdom = new XSDOM([]);
+    elm = document.createElement('div');
+    xsdom.setRootElement(elm);
   });
   it('returns vnode with data and render function', function() {
     function numberInSpan(n) {
@@ -32,9 +34,9 @@ describe('thunk', function() {
     let vnode3 = h('div', [
       thunk('span', 'num', numberInSpan, 2)
     ]);
-    patch(vnode0, vnode1);
-    patch(vnode1, vnode2);
-    patch(vnode2, vnode3);
+    xsdom.patch(vnode1);
+    xsdom.patch(vnode2);
+    xsdom.patch(vnode3);
     assert.equal(called, 2);
   });
   it('renders correctly', function() {
@@ -52,13 +54,13 @@ describe('thunk', function() {
     let vnode3 = h('div', [
       thunk('span', 'num', numberInSpan, 2)
     ]);
-    elm = patch(vnode0, vnode1).elm;
+    elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.firstChild.tagName.toLowerCase(), 'span');
     assert.equal(elm.firstChild.innerHTML, 'Number is 1');
-    elm = patch(vnode1, vnode2).elm;
+    elm = xsdom.patch(vnode2).elm;
     assert.equal(elm.firstChild.tagName.toLowerCase(), 'span');
     assert.equal(elm.firstChild.innerHTML, 'Number is 1');
-    elm = patch(vnode2, vnode3).elm;
+    elm = xsdom.patch(vnode3).elm;
     assert.equal(elm.firstChild.tagName.toLowerCase(), 'span');
     assert.equal(elm.firstChild.innerHTML, 'Number is 2');
     assert.equal(called, 2);
@@ -73,12 +75,12 @@ describe('thunk', function() {
     }
     let vnode1 = thunk('span.number', 'num', numberInSpan, 1);
     let vnode2 = thunk('span.number', 'num', numberInSpan, 2);
-    elm = patch(vnode0, vnode1).elm;
+    elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.tagName.toLowerCase(), 'span');
     assert.equal(elm.className, 'number');
     assert.equal(elm.childNodes[1].tagName.toLowerCase(), 'span');
     assert.equal(elm.childNodes[1].innerHTML, 'odd: 1');
-    elm = patch(vnode1, vnode2).elm;
+    elm = xsdom.patch(vnode2).elm;
     assert.equal(elm.tagName.toLowerCase(), 'span');
     assert.equal(elm.className, 'number');
     assert.equal(elm.childNodes[1].tagName.toLowerCase(), 'span');
@@ -94,15 +96,15 @@ describe('thunk', function() {
     let vnode2 = thunk('span', 'num', numberInSpan, 1);
     let vnode3 = thunk('span', 'num', numberInSpan, 2);
 
-    elm = patch(vnode0, vnode1).elm;
+    elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.tagName.toLowerCase(), 'span');
     assert.equal(elm.innerHTML, 'Number is 1');
 
-    elm = patch(vnode1, vnode2).elm;
+    elm = xsdom.patch(vnode2).elm;
     assert.equal(elm.tagName.toLowerCase(), 'span');
     assert.equal(elm.innerHTML, 'Number is 1');
 
-    elm = patch(vnode2, vnode3).elm;
+    elm = xsdom.patch(vnode3).elm;
     assert.equal(elm.tagName.toLowerCase(), 'span');
     assert.equal(elm.innerHTML, 'Number is 2');
     assert.equal(called, 2);
@@ -118,11 +120,11 @@ describe('thunk', function() {
     let vnode1 = h('div', [thunk('span', 'num', numberInSpan, 1)]);
     let vnode2 = h('div', [thunk('div', 'oddEven', oddEven, 4)]);
 
-    elm = patch(vnode0, vnode1).elm;
+    elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.firstChild.tagName.toLowerCase(), 'span');
     assert.equal(elm.firstChild.innerHTML, 'Number is 1');
 
-    elm = patch(vnode1, vnode2).elm;
+    elm = xsdom.patch(vnode2).elm;
     assert.equal(elm.firstChild.tagName.toLowerCase(), 'div');
     assert.equal(elm.firstChild.innerHTML, 'Even: 4');
   });
@@ -137,11 +139,11 @@ describe('thunk', function() {
     let vnode1 = thunk('span', 'num', numberInSpan, 1);
     let vnode2 = thunk('div', 'oddEven', oddEven, 4);
 
-    elm = patch(vnode0, vnode1).elm;
+    elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.tagName.toLowerCase(), 'span');
     assert.equal(elm.innerHTML, 'Number is 1');
 
-    elm = patch(vnode1, vnode2).elm;
+    elm = xsdom.patch(vnode2).elm;
     assert.equal(elm.tagName.toLowerCase(), 'div');
     assert.equal(elm.innerHTML, 'Even: 4');
   });
@@ -162,8 +164,8 @@ describe('thunk', function() {
       h('div', 'Foo'),
       h('div', 'Foo')
     ]);
-    patch(vnode0, vnode1);
-    patch(vnode1, vnode2);
+    xsdom.patch(vnode1);
+    xsdom.patch(vnode2);
     assert.equal(called, 1);
   });
   it('invokes remove hook on thunks', function() {
@@ -183,8 +185,8 @@ describe('thunk', function() {
       h('div', 'Foo'),
       h('div', 'Foo')
     ]);
-    patch(vnode0, vnode1);
-    patch(vnode1, vnode2);
+    xsdom.patch(vnode1);
+    xsdom.patch(vnode2);
     assert.equal(called, 1);
   });
 });

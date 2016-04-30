@@ -26,19 +26,19 @@ function addNS(data: VNodeData, children: Array<VNode | string | Stream<VNode>>)
 export function h(sel: string, b?: any, c?: any): VNode {
   let data: any = {};
   let children: Array<VNode | string | Stream<VNode>>;
-  let text: string | number;
+  let text: string;
   let i: number;
   if (arguments.length === 3) {
     data = b;
     if (Array.isArray(c)) {
       children = c;
-    } else if (typeof c === 'string' || typeof c === 'number') {
+    } else if (typeof c === 'string') {
       text = c;
     }
   } else if (arguments.length === 2) {
     if (Array.isArray(b)) {
       children = b;
-    } else if (typeof b === 'string' || typeof b === 'number') {
+    } else if (typeof b === 'string') {
       text = b;
     } else {
       data = b;
@@ -46,7 +46,7 @@ export function h(sel: string, b?: any, c?: any): VNode {
   }
   if (Array.isArray(children)) {
     for (i = 0; i < children.length; ++i) {
-      if (typeof children[i] === 'string' || typeof children[i] === 'number') {
+      if (typeof children[i] === 'string') {
         children[i] = createTextVNode(children[i]);
       }
     }

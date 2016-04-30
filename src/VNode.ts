@@ -23,7 +23,7 @@ export interface VNode {
   data?: VNodeData;
   children?: Array<VNode | string | Stream<VNode>>;
   elm?: Element | Text;
-  text?: string | number;
+  text?: string;
   key?: string | number;
 }
 

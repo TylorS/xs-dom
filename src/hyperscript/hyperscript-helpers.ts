@@ -8,7 +8,7 @@ function isSelector(param: any): boolean {
   return isValidString(param) && (param[0] === '.' || param[0] === '#');
 }
 
-function createTagFunction(tagName: string): Function {
+export function createTagFunction(tagName: string): Function {
   return function hyperscript(first: any, b?: any, c?: any) {
     if (isSelector(first)) {
       if (!!b && !!c) {
@@ -38,7 +38,7 @@ const TAG_NAMES = [
   'li', 'link', 'main', 'map', 'mark', 'menu', 'meta', 'nav', 'noscript',
   'object', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 'q', 'rp', 'rt',
   'ruby', 's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span',
-  'strong', 'style', 'sub', 'sup', 'svg', 'table', 'tbody', 'td', 'textarea',
+  'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea',
   'tfoot', 'th', 'thead', 'title', 'tr', 'u', 'ul', 'video', 'progress'
 ];
 

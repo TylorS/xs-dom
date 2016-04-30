@@ -27,3 +27,28 @@ export function createKeyToOldIdx(children: VNodeData[], beginIdx: number, endId
   }
   return map;
 }
+
+function tryPluckProperty(obj: Object, prop: string): any {
+  try {
+    return obj[prop];
+  } catch (e) {
+    return void 0;
+  }
+}
+
+export function pluck(...args: string[]) {
+  return function plucker(obj: Object): any {
+    let x = obj;
+    for (let i = 0, l = args.length; i < l; ++i) {
+      x = tryPluckProperty(x, args[i]);
+    }
+    return x;
+  };
+}
+
+export function forEach(fn: (x: any) => void, array: Array<any>): void {
+  const l = array.length;
+  for (let i = 0; i < l; ++i) {
+    fn(array[i]);
+  }
+}
