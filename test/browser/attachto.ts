@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import XSDOM, {h} from '../../src/index';
+import {init, h} from '../../src/index';
 import attachTo from '../helpers/attachto';
 
 describe('attachTo', function() {
@@ -8,7 +8,7 @@ describe('attachTo', function() {
   let elm;
   beforeEach(function() {
     elm = document.createElement('div');
-    xsdom = new XSDOM([], elm);
+    xsdom = init([], elm);
   });
   it('adds element to target', function() {
     const vnode1 = h('div', [

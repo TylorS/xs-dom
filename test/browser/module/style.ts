@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import fakeRaf from '../../helpers/fake-raf';
 
-import XSDOM, {h} from '../../../src/index';
+import {init, h} from '../../../src/index';
 import styleModule from '../../../src/module/style';
 
 fakeRaf.use();
@@ -10,7 +10,7 @@ describe('style', function() {
   let xsdom, elm;
   beforeEach(function() {
     elm = document.createElement('div');
-    xsdom = new XSDOM([styleModule], elm);
+    xsdom = init([styleModule], elm);
   });
 
   after(() => {

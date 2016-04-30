@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import XSDOM, {h} from '../../src/index';
+import {init, h} from '../../src/index';
 import props from '../../src/module/properties';
 
 describe('hooks', function() {
@@ -8,7 +8,7 @@ describe('hooks', function() {
   let elm;
   beforeEach(function() {
     elm = document.createElement('div');
-    xsdom = new XSDOM([props], elm);
+    xsdom = init([props], elm);
   });
 
   describe('element hooks', function() {
@@ -184,7 +184,7 @@ describe('hooks', function() {
 
     it('removes element when all remove listeners are done', function() {
       let rm1, rm2, rm3;
-      let xsdom = new XSDOM([
+      let xsdom = init([
         {remove: function(_, rm) { rm1 = rm; }},
         {remove: function(_, rm) { rm2 = rm; }},
       ], document.createElement('div'));
@@ -207,7 +207,7 @@ describe('hooks', function() {
       let parent = document.createElement('div');
       let element = document.createElement('div');
       parent.appendChild(element);
-      const xsdom = new XSDOM([], element);
+      const xsdom = init([], element);
 
       function cb(vnode, rm) {
         result.push(vnode);
@@ -231,7 +231,7 @@ describe('hooks', function() {
   describe('module hooks', function() {
     it('invokes `pre` and `post` hook', function() {
       let result = [];
-      let xsdom = new XSDOM([
+      let xsdom = init([
         {pre: function() { result.push('pre'); }},
         {post: function() { result.push('post'); }},
       ], document.createElement('div'));
@@ -268,7 +268,7 @@ describe('hooks', function() {
     it('invokes `destroy` module hook for all removed children', function() {
       let created = 0;
       let destroyed = 0;
-      let xsdom = new XSDOM([
+      let xsdom = init([
         {create: function() { created++; }},
         {destroy: function() { destroyed++; }},
       ], document.createElement('div'));
@@ -289,7 +289,7 @@ describe('hooks', function() {
     it('does not invoke `create` and `remove` module hook for text nodes', function() {
       let created = 0;
       let removed = 0;
-      let xsdom = new XSDOM([
+      let xsdom = init([
         {create: function() { created++; }},
         {remove: function() { removed++; }},
       ], document.createElement('div'));
@@ -307,7 +307,7 @@ describe('hooks', function() {
     it('does not invoke `destroy` module hook for text nodes', function() {
       let created = 0;
       let destroyed = 0;
-      let xsdom = new XSDOM([
+      let xsdom = init([
         {create: function() { created++; }},
         {destroy: function() { destroyed++; }},
       ], document.createElement('div'));

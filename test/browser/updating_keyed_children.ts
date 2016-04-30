@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import XSDOM, {h} from '../../src/index';
+import {init, h} from '../../src/index';
 import props from '../../src/module/properties';
 import klass from '../../src/module/classes';
 
@@ -39,7 +39,7 @@ describe('updating children with keys', function() {
   let elm;
   beforeEach(function() {
     elm = document.createElement('div');
-    xsdom = new XSDOM([props, klass], elm);
+    xsdom = init([props, klass], elm);
   });
 
   describe('addition of elements', function() {
@@ -265,7 +265,7 @@ describe('updating children with keys', function() {
         return spanNumWithOpacity(n, '1');
       }));
       elm = (<HTMLElement> document.createElement('div'));
-      const xsdom = new XSDOM([], elm);
+      const xsdom = init([], elm);
       let shufArr = shuffle(arr.slice(0));
       elm = xsdom.patch(vnode1).elm;
       for (let i = 0; i < elms; ++i) {

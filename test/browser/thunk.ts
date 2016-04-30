@@ -1,13 +1,13 @@
 import * as assert from 'assert';
 
-import XSDOM, {h, thunk} from '../../src/index';
+import {init, h, thunk} from '../../src/index';
 
 describe('thunk', function() {
   let xsdom;
   let elm;
   beforeEach(function() {
     elm = document.createElement('div');
-    xsdom = new XSDOM([], elm);
+    xsdom = init([], elm);
   });
   it('returns vnode with data and render function', function() {
     function numberInSpan(n) {

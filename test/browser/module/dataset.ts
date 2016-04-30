@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import fakeRaf from '../../helpers/fake-raf';
 
-import XSDOM, {h} from '../../../src/index';
+import {init, h} from '../../../src/index';
 import dataset from '../../../src/module/dataset';
 
 fakeRaf.use();
@@ -11,7 +11,7 @@ describe('dataset', function() {
   let elm;
   beforeEach(function() {
     elm = document.createElement('div');
-    xsdom = new XSDOM([dataset], elm);
+    xsdom = init([dataset], elm);
   });
   it('is set on initial element creation', function() {
     elm = xsdom.patch(h('div', {dataset: {foo: 'foo'}})).elm;

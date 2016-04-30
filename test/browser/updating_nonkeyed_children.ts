@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 
-import XSDOM, {h} from '../../src/index';
+import {init, h} from '../../src/index';
 import props from '../../src/module/properties';
 import klass from '../../src/module/classes';
 
@@ -25,7 +25,7 @@ describe('updating children without keys', function() {
   let elm;
   beforeEach(function() {
     elm = document.createElement('div');
-    xsdom = new XSDOM([props, klass], elm);
+    xsdom = init([props, klass], elm);
   });
 
   it('appends elements', function() {
