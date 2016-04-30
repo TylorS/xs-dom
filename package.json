@@ -53,7 +53,7 @@
     "postdist": "uglifyjs dist/xs-dom.js -o dist/xs-dom.min.js",
     "start": "npm install && npm prune",
     "postinstall": "typings install",
-    "preversion": "npm run dist && git commit -m 'chore(dist): build dist/'",
+    "preversion": "npm run dist && git add dist/ && git commit -m 'chore(dist): build dist/'",
     "prerelease": "npm run lib",
     "release": "npm run release-patch",
     "release-patch": "git checkout master && release patch && npm publish --access=public",
