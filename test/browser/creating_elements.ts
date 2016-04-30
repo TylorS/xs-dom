@@ -2,12 +2,13 @@ import * as assert from 'assert';
 
 import XSDOM, {h} from '../../src/index';
 import props from '../../src/module/properties';
+import klass from '../../src/module/classes';
 
 describe('creating elements', function() {
   let xsdom;
   let elm;
   beforeEach(function() {
-    xsdom = new XSDOM([props]);
+    xsdom = new XSDOM([props, klass]);
     elm = document.createElement('div');
     xsdom.setRootElement(elm);
   });
@@ -18,10 +19,6 @@ describe('creating elements', function() {
   });
 
   it('has different tag and id', function() {
-    let elm = (<Element> document.createElement('div'));
-    elm.appendChild(elm);
-    xsdom.setRootElement(elm);
-
     let vnode1 = h('span#id');
     elm = xsdom.patch(vnode1).elm;
     assert.equal(elm.tagName, 'SPAN');

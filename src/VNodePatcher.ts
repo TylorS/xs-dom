@@ -77,22 +77,25 @@ export class VNodePatcher {
   public remove(parentElm: Element, vNodes: VNode[], startIdx: number, endIdx: number) {
     for (; startIdx <= endIdx; ++startIdx) {
       let currentVNode: VNode = vNodes[startIdx];
-      if (isDef(currentVNode) && isDef(currentVNode.sel)) {
-        this.invokeDestroyHook(currentVNode);
+      if (isDef(currentVNode)) {
+        if (isDef(currentVNode.sel)) {
+          this.invokeDestroyHook(currentVNode);
 
-        const listeners = this.callbacks.getListeners();
-        const removeCallback = createRemoveCallback(currentVNode.elm, listeners);
+          const listeners = this.callbacks.getListeners();
+          const removeCallback = createRemoveCallback(currentVNode.elm, listeners);
 
-        this.callbacks.remove(currentVNode, removeCallback);
+          this.callbacks.remove(currentVNode, removeCallback);
 
-        const remove = pluckRemove(currentVNode.data);
-        if (remove) { remove(currentVNode, removeCallback); }
-
-        removeCallback();
-        continue;
+          const remove = pluckRemove(currentVNode.data);
+          if (remove) {
+            remove(currentVNode, removeCallback);
+          } else {
+            removeCallback();
+          }
+        } else {
+          api.removeChild(parentElm, currentVNode.elm);
+        }
       }
-
-      api.removeChild(parentElm, currentVNode.elm);
     }
   }
 

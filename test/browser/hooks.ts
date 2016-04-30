@@ -189,6 +189,7 @@ describe('hooks', function() {
         {remove: function(_, rm) { rm1 = rm; }},
         {remove: function(_, rm) { rm2 = rm; }},
       ]);
+      xsdom.setRootElement(document.createElement('div'));
       let vnode1 = h('div', [h('a', {hook: {remove: function(_, rm) { rm3 = rm; }}})]);
       let vnode2 = h('div', []);
       elm = xsdom.patch(vnode1).elm;
@@ -205,9 +206,11 @@ describe('hooks', function() {
 
     it('invokes remove hook on replaced root', function() {
       let result = [];
+      const xsdom = new XSDOM([]);
       let parent = document.createElement('div');
-      let vnode0 = document.createElement('div');
-      parent.appendChild(vnode0);
+      let element = document.createElement('div');
+      parent.appendChild(element);
+      xsdom.setRootElement(element);
       function cb(vnode, rm) {
         result.push(vnode);
         rm();
@@ -233,6 +236,7 @@ describe('hooks', function() {
         {pre: function() { result.push('pre'); }},
         {post: function() { result.push('post'); }},
       ]);
+      xsdom.setRootElement(document.createElement('div'));
       let vnode1 = h('div');
       xsdom.patch(vnode1);
       assert.deepEqual(result, ['pre', 'post']);
@@ -270,6 +274,7 @@ describe('hooks', function() {
         {create: function() { created++; }},
         {destroy: function() { destroyed++; }},
       ]);
+      xsdom.setRootElement(document.createElement('div'));
       let vnode1 = h('div', [
         h('span', 'First sibling'),
         h('div', [
@@ -291,6 +296,7 @@ describe('hooks', function() {
         {create: function() { created++; }},
         {remove: function() { removed++; }},
       ]);
+      xsdom.setRootElement(document.createElement('div'));
       let vnode1 = h('div', [
         h('span', 'First child'),
         '',
@@ -309,6 +315,7 @@ describe('hooks', function() {
         {create: function() { created++; }},
         {destroy: function() { destroyed++; }},
       ]);
+      xsdom.setRootElement(document.createElement('div'));
       let vnode1 = h('div', [
         h('span', 'First sibling'),
         h('div', [

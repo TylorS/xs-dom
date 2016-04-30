@@ -4,6 +4,8 @@ import XSDOM, {h} from '../../src/index';
 import props from '../../src/module/properties';
 import klass from '../../src/module/classes';
 
+import {shuffle} from '../helpers/shuffle';
+
 function prop(name) {
   return function(obj) {
     return obj[name];
@@ -26,6 +28,10 @@ function spanNum(n) {
   } else {
     return h('span', {key: n}, n.toString());
   }
+}
+
+function spanNumWithOpacity(n, o) {
+  return h('span', {key: n, style: {opacity: o}}, n.toString());
 }
 
 describe('updating children with keys', function() {
@@ -254,10 +260,6 @@ describe('updating children with keys', function() {
 
   it('handles random shuffles', function() {
     let n, arr = [], opacities = [], elms = 14, samples = 5;
-    let shufArr = [];
-    function spanNumWithOpacity(n, o) {
-      return h('span', {key: n, style: {opacity: o}}, n.toString());
-    }
     for (n = 0; n < elms; ++n) { arr[n] = n; }
     for (n = 0; n < samples; ++n) {
       let vnode1 = h('span', arr.map(function(n) {
@@ -265,6 +267,7 @@ describe('updating children with keys', function() {
       }));
       const xsdom = new XSDOM([]);
       elm = (<HTMLElement> document.createElement('div'));
+      let shufArr = shuffle(arr.slice(0));
       xsdom.setRootElement(elm);
       elm = xsdom.patch(vnode1).elm;
       for (let i = 0; i < elms; ++i) {
