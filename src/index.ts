@@ -37,4 +37,4 @@ export {h,
 import svg from './hyperscript/svg-helpers';
 export {svg};
 
-export {XSDOM as default} from './xs-dom';
+export {init} from './xs-dom';

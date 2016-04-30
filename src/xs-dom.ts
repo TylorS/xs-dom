@@ -3,6 +3,7 @@ import {sameVNode} from './util/index';
 import {Callbacks} from './Callbacks';
 import {ElementCreator} from './ElementCreator';
 import {VNodePatcher} from './VNodePatcher';
+import {curry2} from './util/index';
 
 import {VNode, createVNode} from './VNode';
 import {Module} from './Module';
@@ -14,19 +15,23 @@ function emptyVNodeAt(elm: Element): VNode {
   });
 }
 
-export class XSDOM {
-  private insertedVNodeQueue: VNode[];
-  private callbacks: Callbacks;
-  private elementCreator: ElementCreator;
-  private vNodePatcher: VNodePatcher;
-  private oldVNode: VNode;
+export const init = curry2(
+  function init(modules: Module[], rootElement: Element) {
+    const insertedVNodeQueue: VNode[] = [];
+    const callbacks = new Callbacks(modules);
+    const elementCreator = new ElementCreator(insertedVNodeQueue, callbacks);
+    const vNodePatcher = new VNodePatcher(elementCreator, callbacks);
+    const vNode = emptyVNodeAt(rootElement);
+    return new XSDOM(insertedVNodeQueue, callbacks, elementCreator, vNodePatcher, vNode);
+  }
+);
 
-  constructor (modules: Array<Module>, rootElement: Element) {
-    this.oldVNode = emptyVNodeAt(rootElement);
-    this.insertedVNodeQueue = [];
-    this.callbacks = new Callbacks(modules);
-    this.elementCreator = new ElementCreator(this.insertedVNodeQueue, this.callbacks);
-    this.vNodePatcher = new VNodePatcher(this.elementCreator, this.callbacks);
+class XSDOM {
+  constructor (private insertedVNodeQueue: VNode[],
+               private callbacks: Callbacks,
+               private elementCreator: ElementCreator,
+               private vNodePatcher: VNodePatcher,
+               private oldVNode: VNode) {
   }
 
   public patch (vNode: VNode) {

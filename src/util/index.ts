@@ -52,3 +52,14 @@ export function forEach(fn: (x: any) => void, array: Array<any>): void {
     fn(array[i]);
   }
 }
+
+export function curry2(f: Function): Function {
+  function curried (a: any, b: any): any {
+    switch (arguments.length) {
+      case 0: return curried;
+      case 1: return (b: any) => f(a, b);
+      default: return f(a, b);
+    }
+  }
+  return curried;
+}
