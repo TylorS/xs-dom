@@ -1,9 +1,9 @@
 import {VNode} from '../VNode';
 
 function updateProps(oldVnode: VNode, vnode: VNode) {
-  let key;
-  let cur;
-  let old;
+  let key: any;
+  let cur: any;
+  let old: any;
   let elm = vnode.elm;
   let oldProps = oldVnode.data.props || {};
   let props = vnode.data.props || {};

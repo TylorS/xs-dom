@@ -14,11 +14,38 @@
     "indentSize": 2,
     "tabSize": 2
   },
-   "files": [
-     "typings/main.d.ts",
-     "src/index.ts"
-   ],
-   "exclude": [
-     "node_modules"
-   ]
+  "files": [
+    "typings/main.d.ts",
+    "src/api/dom.ts",
+    "src/Callbacks.ts",
+    "src/ElementCreator.ts",
+    "src/hyperscript/hyperscript-helpers.ts",
+    "src/hyperscript/hyperscript.ts",
+    "src/hyperscript/svg-helpers.ts",
+    "src/hyperscript/thunk.ts",
+    "src/index.ts",
+    "src/Module.ts",
+    "src/module/attributes.ts",
+    "src/module/classes.ts",
+    "src/module/dataset.ts",
+    "src/module/isolation.ts",
+    "src/module/properties.ts",
+    "src/module/style.ts",
+    "src/util/index.ts",
+    "src/util/parseSelector.ts",
+    "src/VNode.ts",
+    "src/VNodePatcher.ts",
+    "src/VNodeUpdater.ts",
+    "src/xs-dom.ts"
+  ],
+  "filesGlob": [
+    "typings/main.d.ts",
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  }
 }

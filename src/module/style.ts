@@ -1,13 +1,15 @@
-const raf = (typeof window !== 'undefined' && window.requestAnimationFrame) || setTimeout;
-const nextFrame = function nextFrame(fn) { raf(function() { raf(fn); }); };
+import {VNode} from '../VNode';
 
-function setNextFrame(obj, prop, val) {
+const raf = (typeof window !== 'undefined' && window.requestAnimationFrame) || setTimeout;
+const nextFrame = function nextFrame(fn: any) { raf(function() { raf(fn); }); };
+
+function setNextFrame(obj: Object, prop: string, val: any) {
   nextFrame(function() { obj[prop] = val; });
 }
 
-function updateStyle(oldVnode, vnode) {
-  let cur;
-  let name;
+function updateStyle(oldVnode: VNode, vnode: VNode) {
+  let cur: any;
+  let name: any;
   let elm = vnode.elm;
   let oldStyle = oldVnode.data.style || {};
   let style = vnode.data.style || {};
@@ -15,54 +17,54 @@ function updateStyle(oldVnode, vnode) {
 
   for (name in oldStyle) {
     if (!style[name]) {
-      elm.style[name] = '';
+      (<HTMLElement> elm).style[name] = '';
     }
   }
   for (name in style) {
     cur = style[name];
     if (name === 'delayed') {
-      for (name in style.delayed) {
-        cur = style.delayed[name];
-        if (!oldHasDel || cur !== oldStyle.delayed[name]) {
-          setNextFrame(elm.style, name, cur);
+      for (name in (<any> style).delayed) {
+        cur = (<any> style).delayed[name];
+        if (!oldHasDel || cur !== (<any> oldStyle).delayed[name]) {
+          setNextFrame((<HTMLElement> elm).style, name, cur);
         }
       }
     } else if (name !== 'remove' && cur !== oldStyle[name]) {
-      elm.style[name] = cur;
+      (<HTMLElement> elm).style[name] = cur;
     }
   }
 }
 
-function applyDestroyStyle(vnode) {
-  let style;
-  let name;
+function applyDestroyStyle(vnode: VNode) {
+  let style: any;
+  let name: any;
   let elm = vnode.elm;
   let s = vnode.data.style;
 
-  if (!s || !(style = s.destroy)) return;
+  if (!s || !(style = (<any> s).destroy)) return;
   for (name in style) {
-    elm.style[name] = style[name];
+    (<HTMLElement> elm).style[name] = style[name];
   }
 }
 
-function applyRemoveStyle(vnode, rm) {
+function applyRemoveStyle(vnode: VNode, rm: () => void) {
   let s = vnode.data.style;
-  if (!s || !s.remove) {
+  if (!s || !(<any> s).remove) {
     rm();
     return;
   }
-  let name;
+  let name: any;
   let elm = vnode.elm;
   let i = 0;
-  let compStyle;
-  let style = s.remove;
+  let compStyle: any;
+  let style = (<any> s).remove;
   let amount = 0;
-  let applied = [];
+  let applied: any[] = [];
   for (name in style) {
     applied.push(name);
-    elm.style[name] = style[name];
+    (<HTMLElement> elm).style[name] = style[name];
   }
-  compStyle = getComputedStyle(elm);
+  compStyle = getComputedStyle((<HTMLElement> elm));
   let props = compStyle['transition-property'].split(', ');
   for (; i < props.length; ++i) {
     if (applied.indexOf(props[i]) !== -1) amount++;
