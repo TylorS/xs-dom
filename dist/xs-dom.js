@@ -1,25 +1,12 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.xsDom = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.Callbacks = undefined;
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-exports.createRemoveCallback = createRemoveCallback;
-
-var _index = require('./util/index');
-
-var _dom = require('./api/dom');
-
-var api = _interopRequireWildcard(_dom);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var index_1 = require('./util/index');
+var api = require('./api/dom');
 var hooks = ['create', 'update', 'remove', 'destroy', 'pre', 'post'];
 function registerModules(modules) {
     var callbacks = {};
@@ -41,6 +28,7 @@ function createRemoveCallback(childElm, listeners) {
         }
     };
 }
+exports.createRemoveCallback = createRemoveCallback;
 
 var Callbacks = function () {
     function Callbacks(modules) {
@@ -62,11 +50,11 @@ var Callbacks = function () {
             var create = this.callbacks.create;
             var length = create.length;
             if (length === 1) {
-                create[0]((0, _index.emptyVNode)(), vNode);
+                create[0](index_1.emptyVNode(), vNode);
                 return;
             }
             for (var i = 0; i < length; ++i) {
-                create[i]((0, _index.emptyVNode)(), vNode);
+                create[i](index_1.emptyVNode(), vNode);
             }
         }
     }, {
@@ -120,36 +108,24 @@ var Callbacks = function () {
     return Callbacks;
 }();
 
-
-
 exports.Callbacks = Callbacks;
 
-},{"./api/dom":6,"./util/index":12}],2:[function(require,module,exports){
-'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.ElementCreator = undefined;
+},{"./api/dom":6,"./util/index":12}],2:[function(require,module,exports){
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dom = require('./api/dom');
-
-var api = _interopRequireWildcard(_dom);
-
-var _index = require('./util/index');
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var pluckInit = (0, _index.pluck)('hook', 'init');
-var pluckCreate = (0, _index.pluck)('hook', 'create');
-var pluckInsert = (0, _index.pluck)('hook', 'insert');
-var pluckNS = (0, _index.pluck)('ns');
+var api = require('./api/dom');
+var index_1 = require('./util/index');
+var pluckInit = index_1.pluck('hook', 'init');
+var pluckCreate = index_1.pluck('hook', 'create');
+var pluckInsert = index_1.pluck('hook', 'insert');
+var pluckNS = index_1.pluck('ns');
 
-var ElementCreator = exports.ElementCreator = function () {
+var ElementCreator = function () {
     function ElementCreator(insertedVNodeQueue, callbacks) {
         _classCallCheck(this, ElementCreator);
 
@@ -161,18 +137,18 @@ var ElementCreator = exports.ElementCreator = function () {
         key: 'create',
         value: function create(vNode) {
             var init = pluckInit(vNode.data);
-            if ((0, _index.isDef)(init)) {
+            if (index_1.isDef(init)) {
                 init(vNode);
             }
-            if ((0, _index.isDef)(vNode.sel)) {
-                var _parseSelector = (0, _index.parseSelector)(vNode.sel);
+            if (index_1.isDef(vNode.sel)) {
+                var _index_1$parseSelecto = index_1.parseSelector(vNode.sel);
 
-                var tagName = _parseSelector.tagName;
-                var id = _parseSelector.id;
-                var className = _parseSelector.className;
+                var tagName = _index_1$parseSelecto.tagName;
+                var id = _index_1$parseSelecto.id;
+                var className = _index_1$parseSelecto.className;
 
                 var namespace = pluckNS(vNode.data);
-                vNode.elm = (0, _index.isDef)(namespace) ? api.createElementNS(namespace, tagName) : api.createElement(tagName);
+                vNode.elm = index_1.isDef(namespace) ? api.createElementNS(namespace, tagName) : api.createElement(tagName);
                 if (id) {
                     vNode.elm.id = id;
                 }
@@ -189,7 +165,7 @@ var ElementCreator = exports.ElementCreator = function () {
                 this.callbacks.create(vNode);
                 var create = pluckCreate(vNode.data);
                 if (create) {
-                    create((0, _index.emptyVNode)(), vNode);
+                    create(index_1.emptyVNode(), vNode);
                 }
                 ;
                 if (pluckInsert(vNode.data)) {
@@ -205,15 +181,12 @@ var ElementCreator = exports.ElementCreator = function () {
     return ElementCreator;
 }();
 
+exports.ElementCreator = ElementCreator;
+
 
 },{"./api/dom":6,"./util/index":12}],3:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.createVNode = createVNode;
-exports.createTextVNode = createTextVNode;
 function createVNode(_ref) {
     var sel = _ref.sel;
     var _ref$data = _ref.data;
@@ -228,6 +201,7 @@ function createVNode(_ref) {
     var key = data === void 0 ? void 0 : data.key;
     return { sel: sel, data: data, children: children, elm: elm, text: text, key: key };
 }
+exports.createVNode = createVNode;
 function createTextVNode(text) {
     return createVNode({
         sel: void 0,
@@ -236,59 +210,47 @@ function createTextVNode(text) {
         text: text
     });
 }
+exports.createTextVNode = createTextVNode;
 
 
 },{}],4:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.VNodePatcher = undefined;
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Callbacks = require('./Callbacks');
-
-var _VNodeUpdater = require('./VNodeUpdater');
-
-var _dom = require('./api/dom');
-
-var api = _interopRequireWildcard(_dom);
-
-var _index = require('./util/index');
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var pluckPrepatch = (0, _index.pluck)('hook', 'prepatch');
-var pluckPostpatch = (0, _index.pluck)('hook', 'postpatch');
-var pluckUpdate = (0, _index.pluck)('hook', 'update');
-var pluckRemove = (0, _index.pluck)('hook', 'remove');
-var pluckDestroy = (0, _index.pluck)('hook', 'destroy');
+var Callbacks_1 = require('./Callbacks');
+var VNodeUpdater_1 = require('./VNodeUpdater');
+var api = require('./api/dom');
+var index_1 = require('./util/index');
+var pluckPrepatch = index_1.pluck('hook', 'prepatch');
+var pluckPostpatch = index_1.pluck('hook', 'postpatch');
+var pluckUpdate = index_1.pluck('hook', 'update');
+var pluckRemove = index_1.pluck('hook', 'remove');
+var pluckDestroy = index_1.pluck('hook', 'destroy');
 
-var VNodePatcher = exports.VNodePatcher = function () {
+var VNodePatcher = function () {
     function VNodePatcher(elementCreator, callbacks) {
         _classCallCheck(this, VNodePatcher);
 
         this.elementCreator = elementCreator;
         this.callbacks = callbacks;
-        this.vNodeUpdater = new _VNodeUpdater.VNodeUpdater(this);
+        this.vNodeUpdater = new VNodeUpdater_1.VNodeUpdater(this);
     }
 
     _createClass(VNodePatcher, [{
         key: 'patch',
         value: function patch(oldVNode, vNode) {
             var prepatch = pluckPrepatch(vNode.data);
-            if ((0, _index.isDef)(prepatch)) {
+            if (index_1.isDef(prepatch)) {
                 prepatch(oldVNode, vNode);
             }
             var elm = vNode.elm = oldVNode.elm;
             var oldChildren = oldVNode.children;
             var children = vNode.children;
             if (oldVNode === vNode) return; // used for thunks only
-            if (!(0, _index.sameVNode)(oldVNode, vNode)) {
+            if (!index_1.sameVNode(oldVNode, vNode)) {
                 var parentElm = api.parentNode(oldVNode.elm);
                 elm = this.elementCreator.create(vNode);
                 api.insertBefore(parentElm, elm, oldVNode.elm);
@@ -300,18 +262,18 @@ var VNodePatcher = exports.VNodePatcher = function () {
             if (update) {
                 update(oldVNode, vNode);
             }
-            if ((0, _index.isUndef)(vNode.text)) {
-                if ((0, _index.isDef)(oldVNode.text)) {
+            if (index_1.isUndef(vNode.text)) {
+                if (index_1.isDef(oldVNode.text)) {
                     api.setTextContent(elm, '');
                 }
-                if ((0, _index.isDef)(oldChildren) && (0, _index.isDef)(children) && oldChildren !== children) {
+                if (index_1.isDef(oldChildren) && index_1.isDef(children) && oldChildren !== children) {
                     this.vNodeUpdater.update(elm, oldChildren, children);
-                } else if ((0, _index.isDef)(children)) {
+                } else if (index_1.isDef(children)) {
                     this.add(elm, null, children, 0, children.length - 1);
-                } else if ((0, _index.isDef)(oldChildren)) {
+                } else if (index_1.isDef(oldChildren)) {
                     this.remove(elm, oldChildren, 0, oldChildren.length - 1);
                 }
-            } else if ((0, _index.isDef)(vNode.text) && oldVNode.text !== vNode.text) {
+            } else if (index_1.isDef(vNode.text) && oldVNode.text !== vNode.text) {
                 api.setTextContent(elm, vNode.text);
             }
             var postpatch = pluckPostpatch(vNode.data);
@@ -339,11 +301,11 @@ var VNodePatcher = exports.VNodePatcher = function () {
         value: function remove(parentElm, vNodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var currentVNode = vNodes[startIdx];
-                if ((0, _index.isDef)(currentVNode)) {
-                    if ((0, _index.isDef)(currentVNode.sel)) {
+                if (index_1.isDef(currentVNode)) {
+                    if (index_1.isDef(currentVNode.sel)) {
                         this.invokeDestroyHook(currentVNode);
                         var listeners = this.callbacks.getListeners();
-                        var removeCallback = (0, _Callbacks.createRemoveCallback)(currentVNode.elm, listeners);
+                        var removeCallback = Callbacks_1.createRemoveCallback(currentVNode.elm, listeners);
                         this.callbacks.remove(currentVNode, removeCallback);
                         var remove = pluckRemove(currentVNode.data);
                         if (remove) {
@@ -370,8 +332,8 @@ var VNodePatcher = exports.VNodePatcher = function () {
                 destroy(vNode);
             }
             this.callbacks.destroy(vNode);
-            if ((0, _index.isDef)(vNode.children)) {
-                (0, _index.forEach)(function (c) {
+            if (index_1.isDef(vNode.children)) {
+                index_1.forEach(function (c) {
                     return _this.invokeDestroyHook(c);
                 }, vNode.children);
             }
@@ -381,28 +343,20 @@ var VNodePatcher = exports.VNodePatcher = function () {
     return VNodePatcher;
 }();
 
+exports.VNodePatcher = VNodePatcher;
+
 
 },{"./Callbacks":1,"./VNodeUpdater":5,"./api/dom":6,"./util/index":12}],5:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.VNodeUpdater = undefined;
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _index = require('./util/index');
-
-var _dom = require('./api/dom');
-
-var api = _interopRequireWildcard(_dom);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var VNodeUpdater = exports.VNodeUpdater = function () {
+var index_1 = require('./util/index');
+var api = require('./api/dom');
+
+var VNodeUpdater = function () {
     function VNodeUpdater(vNodePatcher) {
         _classCallCheck(this, VNodeUpdater);
 
@@ -427,35 +381,35 @@ var VNodeUpdater = exports.VNodeUpdater = function () {
             var oldKeyToIdx = void 0; // a map of vNode keys -> index in oldChildren array
             var idxInOld = void 0; // index of a *new* vNode in the oldChildren array
             while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
-                if ((0, _index.isUndef)(oldStartVNode)) {
+                if (index_1.isUndef(oldStartVNode)) {
                     oldStartVNode = oldChildren[++oldStartIdx];
-                } else if ((0, _index.isUndef)(oldEndVNode)) {
+                } else if (index_1.isUndef(oldEndVNode)) {
                     oldEndVNode = oldChildren[--oldEndIdx];
-                } else if ((0, _index.sameVNode)(oldStartVNode, newStartVNode)) {
+                } else if (index_1.sameVNode(oldStartVNode, newStartVNode)) {
                     this.vNodePatcher.patch(oldStartVNode, newStartVNode);
                     oldStartVNode = oldChildren[++oldStartIdx];
                     newStartVNode = children[++newStartIdx];
-                } else if ((0, _index.sameVNode)(oldEndVNode, newEndVNode)) {
+                } else if (index_1.sameVNode(oldEndVNode, newEndVNode)) {
                     this.vNodePatcher.patch(oldEndVNode, newEndVNode);
                     oldEndVNode = oldChildren[--oldEndIdx];
                     newEndVNode = children[--newEndIdx];
-                } else if ((0, _index.sameVNode)(oldStartVNode, newEndVNode)) {
+                } else if (index_1.sameVNode(oldStartVNode, newEndVNode)) {
                     this.vNodePatcher.patch(oldStartVNode, newEndVNode);
                     api.insertBefore(element, oldStartVNode.elm, api.nextSibling(oldEndVNode.elm));
                     oldStartVNode = oldChildren[++oldStartIdx];
                     newEndVNode = children[--newEndIdx];
-                } else if ((0, _index.sameVNode)(oldEndVNode, newStartVNode)) {
+                } else if (index_1.sameVNode(oldEndVNode, newStartVNode)) {
                     this.vNodePatcher.patch(oldEndVNode, newStartVNode);
                     api.insertBefore(element, oldEndVNode.elm, oldStartVNode.elm);
                     oldEndVNode = oldChildren[--oldEndIdx];
                     newStartVNode = children[++newStartIdx];
                 } else {
-                    if ((0, _index.isUndef)(oldKeyToIdx)) {
+                    if (index_1.isUndef(oldKeyToIdx)) {
                         // a map of keys -> index of oldChidren array
-                        oldKeyToIdx = (0, _index.createKeyToOldIdx)(oldChildren, oldStartIdx, oldEndIdx);
+                        oldKeyToIdx = index_1.createKeyToOldIdx(oldChildren, oldStartIdx, oldEndIdx);
                     }
                     idxInOld = oldKeyToIdx[newStartVNode.key]; // try to find where the current vNode was previously
-                    if ((0, _index.isUndef)(idxInOld)) {
+                    if (index_1.isUndef(idxInOld)) {
                         var elm = this.vNodePatcher.create(newStartVNode);
                         api.insertBefore(element, elm, oldStartVNode.elm);
                         newStartVNode = children[++newStartIdx];
@@ -469,7 +423,7 @@ var VNodeUpdater = exports.VNodeUpdater = function () {
                 }
             }
             if (oldStartIdx > oldEndIdx) {
-                var before = (0, _index.isUndef)(children[newEndIdx + 1]) ? null : children[newEndIdx + 1].elm;
+                var before = index_1.isUndef(children[newEndIdx + 1]) ? null : children[newEndIdx + 1].elm;
                 this.vNodePatcher.add(element, before, children, newStartIdx, newEndIdx);
             } else if (newStartIdx > newEndIdx) {
                 this.vNodePatcher.remove(element, oldChildren, oldStartIdx, oldEndIdx);
@@ -480,68 +434,61 @@ var VNodeUpdater = exports.VNodeUpdater = function () {
     return VNodeUpdater;
 }();
 
+exports.VNodeUpdater = VNodeUpdater;
+
 
 },{"./api/dom":6,"./util/index":12}],6:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.createElement = createElement;
-exports.createElementNS = createElementNS;
-exports.createTextNode = createTextNode;
-exports.insertBefore = insertBefore;
-exports.removeChild = removeChild;
-exports.appendChild = appendChild;
-exports.parentNode = parentNode;
-exports.nextSibling = nextSibling;
-exports.tagName = tagName;
-exports.setTextContent = setTextContent;
 function createElement(tagName) {
     return document.createElement(tagName);
 }
+exports.createElement = createElement;
 function createElementNS(namespaceURI, qualifiedName) {
     return document.createElementNS(namespaceURI, qualifiedName);
 }
+exports.createElementNS = createElementNS;
 function createTextNode(text) {
     return document.createTextNode(text);
 }
+exports.createTextNode = createTextNode;
 function insertBefore(parentNode, newNode, referenceNode) {
     parentNode.insertBefore(newNode, referenceNode);
 }
+exports.insertBefore = insertBefore;
 function removeChild(node, child) {
     if (node === void 0) {
         return;
     }
     node.removeChild(child);
 }
+exports.removeChild = removeChild;
 function appendChild(node, child) {
     node.appendChild(child);
 }
+exports.appendChild = appendChild;
 function parentNode(node) {
     return node.parentElement;
 }
+exports.parentNode = parentNode;
 function nextSibling(node) {
     return node.nextSibling;
 }
+exports.nextSibling = nextSibling;
 function tagName(node) {
     return node.tagName;
 }
+exports.tagName = tagName;
 function setTextContent(node, text) {
     node.textContent = text;
 }
+exports.setTextContent = setTextContent;
 
 
 },{}],7:[function(require,module,exports){
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.createTagFunction = createTagFunction;
-
-var _hyperscript = require('./hyperscript');
-
+var hyperscript_1 = require('./hyperscript');
 function isValidString(param) {
     return typeof param === 'string' && param.length > 0;
 }
@@ -552,39 +499,35 @@ function createTagFunction(tagName) {
     return function hyperscript(first, b, c) {
         if (isSelector(first)) {
             if (!!b && !!c) {
-                return (0, _hyperscript.h)(tagName + first, b, c);
+                return hyperscript_1.h(tagName + first, b, c);
             } else if (!!b) {
-                return (0, _hyperscript.h)(tagName + first, b);
+                return hyperscript_1.h(tagName + first, b);
             } else {
-                return (0, _hyperscript.h)(tagName + first, {});
+                return hyperscript_1.h(tagName + first, {});
             }
         } else if (!!b) {
-            return (0, _hyperscript.h)(tagName, first, b);
+            return hyperscript_1.h(tagName, first, b);
         } else if (!!first) {
-            return (0, _hyperscript.h)(tagName, first);
+            return hyperscript_1.h(tagName, first);
         } else {
-            return (0, _hyperscript.h)(tagName, {});
+            return hyperscript_1.h(tagName, {});
         }
     };
 }
+exports.createTagFunction = createTagFunction;
 var TAG_NAMES = ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'meta', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'u', 'ul', 'video', 'progress'];
 var exported = { TAG_NAMES: TAG_NAMES, isSelector: isSelector, createTagFunction: createTagFunction };
 TAG_NAMES.forEach(function (n) {
     exported[n] = createTagFunction(n);
 });
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exported;
 
 
 },{"./hyperscript":8}],8:[function(require,module,exports){
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.h = h;
-
-var _VNode = require('../VNode');
-
+var VNode_1 = require('../VNode');
 function isObservable(x) {
     return !Array.isArray(x) && typeof x.map === 'function';
 }
@@ -628,45 +571,36 @@ function h(sel, b, c) {
     if (Array.isArray(children)) {
         for (i = 0; i < children.length; ++i) {
             if (typeof children[i] === 'string') {
-                children[i] = (0, _VNode.createTextVNode)(children[i]);
+                children[i] = VNode_1.createTextVNode(children[i]);
             }
         }
     }
     if (sel[0] === 's' && sel[1] === 'v' && sel[2] === 'g') {
         addNS(data, children);
     }
-    return (0, _VNode.createVNode)({ sel: sel, data: data, children: children, text: text });
+    return VNode_1.createVNode({ sel: sel, data: data, children: children, text: text });
 }
+exports.h = h;
 ;
 
 
 },{"../VNode":3}],9:[function(require,module,exports){
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _hyperscriptHelpers = require('./hyperscript-helpers');
-
+var hyperscript_helpers_1 = require('./hyperscript-helpers');
 var TAG_NAMES = ['a', 'altGlyph', 'altGlyphDef', 'altGlyphItem', 'animate', 'animateColor', 'animateMotion', 'animateTransform', 'animateTransform', 'circle', 'clipPath', 'color-profile', 'cursor', 'defs', 'desc', 'ellipse', 'feBlend', 'feColorMatrix', 'feComponentTransfer', 'feComposite', 'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap', 'feDistantLight', 'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR', 'feGaussianBlur', 'feImage', 'feMerge', 'feMergeNode', 'feMorphology', 'feOffset', 'fePointLight', 'feSpecularLighting', 'feSpotlight', 'feTile', 'feTurbulence', 'filter', 'font', 'font-face', 'font-face-format', 'font-face-name', 'font-face-src', 'font-face-uri', 'foreignObject', 'g', 'glyph', 'glyphRef', 'hkern', 'image', 'line', 'linearGradient', 'marker', 'mask', 'metadata', 'missing-glyph', 'mpath', 'path', 'pattern', 'polygon', 'polyling', 'radialGradient', 'rect', 'script', 'set', 'stop', 'style', 'switch', 'symbol', 'text', 'textPath', 'title', 'tref', 'tspan', 'use', 'view', 'vkern'];
-var svg = (0, _hyperscriptHelpers.createTagFunction)('svg');
+var svg = hyperscript_helpers_1.createTagFunction('svg');
 TAG_NAMES.forEach(function (tag) {
-    svg[tag] = (0, _hyperscriptHelpers.createTagFunction)(tag);
+    svg[tag] = hyperscript_helpers_1.createTagFunction(tag);
 });
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = svg;
 
 
 },{"./hyperscript-helpers":7}],10:[function(require,module,exports){
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.thunk = thunk;
-
-var _hyperscript = require('./hyperscript');
-
+var hyperscript_1 = require('./hyperscript');
 function copyToThunk(vnode, thunk) {
     thunk.elm = vnode.elm;
     vnode.data.fn = thunk.data.fn;
@@ -702,154 +636,127 @@ function thunk(sel, key, fn) {
         args[_key - 3] = arguments[_key];
     }
 
-    return (0, _hyperscript.h)(sel, {
+    return hyperscript_1.h(sel, {
         key: key,
         hook: { init: init, prepatch: prepatch },
         fn: fn,
         args: args
     });
 }
+exports.thunk = thunk;
 ;
 
 
 },{"./hyperscript":8}],11:[function(require,module,exports){
-'use strict';
+"use strict";
+// TS Defs;
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.init = exports.svg = exports.video = exports.ul = exports.u = exports.tr = exports.title = exports.thead = exports.th = exports.tfoot = exports.textarea = exports.td = exports.tbody = exports.table = exports.sup = exports.sub = exports.style = exports.strong = exports.span = exports.source = exports.small = exports.select = exports.section = exports.script = exports.samp = exports.s = exports.ruby = exports.rt = exports.rp = exports.q = exports.pre = exports.param = exports.p = exports.option = exports.optgroup = exports.ol = exports.object = exports.noscript = exports.nav = exports.meta = exports.menu = exports.mark = exports.map = exports.main = exports.link = exports.li = exports.legend = exports.label = exports.keygen = exports.kbd = exports.ins = exports.input = exports.img = exports.iframe = exports.i = exports.html = exports.hr = exports.hgroup = exports.header = exports.head = exports.h6 = exports.h5 = exports.h4 = exports.h3 = exports.h2 = exports.h1 = exports.form = exports.footer = exports.figure = exports.figcaption = exports.fieldset = exports.embed = exports.em = exports.dt = exports.dl = exports.div = exports.dir = exports.dfn = exports.del = exports.dd = exports.colgroup = exports.col = exports.code = exports.cite = exports.caption = exports.canvas = exports.button = exports.br = exports.body = exports.blockquote = exports.bdo = exports.bdi = exports.base = exports.b = exports.audio = exports.aside = exports.article = exports.area = exports.address = exports.abbr = exports.a = exports.h = exports.thunk = undefined;
+var thunk_1 = require('./hyperscript/thunk');
+exports.thunk = thunk_1.thunk;
+var hyperscript_1 = require('./hyperscript/hyperscript');
+exports.h = hyperscript_1.h;
+var hyperscript_helpers_1 = require('./hyperscript/hyperscript-helpers');
+var _hyperscript_helpers_ = hyperscript_helpers_1.default;
+var a = _hyperscript_helpers_.a;
+var abbr = _hyperscript_helpers_.abbr;
+var address = _hyperscript_helpers_.address;
+var area = _hyperscript_helpers_.area;
+var article = _hyperscript_helpers_.article;
+var aside = _hyperscript_helpers_.aside;
+var audio = _hyperscript_helpers_.audio;
+var b = _hyperscript_helpers_.b;
+var base = _hyperscript_helpers_.base;
+var bdi = _hyperscript_helpers_.bdi;
+var bdo = _hyperscript_helpers_.bdo;
+var blockquote = _hyperscript_helpers_.blockquote;
+var body = _hyperscript_helpers_.body;
+var br = _hyperscript_helpers_.br;
+var button = _hyperscript_helpers_.button;
+var canvas = _hyperscript_helpers_.canvas;
+var caption = _hyperscript_helpers_.caption;
+var cite = _hyperscript_helpers_.cite;
+var code = _hyperscript_helpers_.code;
+var col = _hyperscript_helpers_.col;
+var colgroup = _hyperscript_helpers_.colgroup;
+var dd = _hyperscript_helpers_.dd;
+var del = _hyperscript_helpers_.del;
+var dfn = _hyperscript_helpers_.dfn;
+var dir = _hyperscript_helpers_.dir;
+var div = _hyperscript_helpers_.div;
+var dl = _hyperscript_helpers_.dl;
+var dt = _hyperscript_helpers_.dt;
+var em = _hyperscript_helpers_.em;
+var embed = _hyperscript_helpers_.embed;
+var fieldset = _hyperscript_helpers_.fieldset;
+var figcaption = _hyperscript_helpers_.figcaption;
+var figure = _hyperscript_helpers_.figure;
+var footer = _hyperscript_helpers_.footer;
+var form = _hyperscript_helpers_.form;
+var h1 = _hyperscript_helpers_.h1;
+var h2 = _hyperscript_helpers_.h2;
+var h3 = _hyperscript_helpers_.h3;
+var h4 = _hyperscript_helpers_.h4;
+var h5 = _hyperscript_helpers_.h5;
+var h6 = _hyperscript_helpers_.h6;
+var head = _hyperscript_helpers_.head;
+var header = _hyperscript_helpers_.header;
+var hgroup = _hyperscript_helpers_.hgroup;
+var hr = _hyperscript_helpers_.hr;
+var html = _hyperscript_helpers_.html;
+var i = _hyperscript_helpers_.i;
+var iframe = _hyperscript_helpers_.iframe;
+var img = _hyperscript_helpers_.img;
+var input = _hyperscript_helpers_.input;
+var ins = _hyperscript_helpers_.ins;
+var kbd = _hyperscript_helpers_.kbd;
+var keygen = _hyperscript_helpers_.keygen;
+var label = _hyperscript_helpers_.label;
+var legend = _hyperscript_helpers_.legend;
+var li = _hyperscript_helpers_.li;
+var link = _hyperscript_helpers_.link;
+var main = _hyperscript_helpers_.main;
+var map = _hyperscript_helpers_.map;
+var mark = _hyperscript_helpers_.mark;
+var menu = _hyperscript_helpers_.menu;
+var meta = _hyperscript_helpers_.meta;
+var nav = _hyperscript_helpers_.nav;
+var noscript = _hyperscript_helpers_.noscript;
+var object = _hyperscript_helpers_.object;
+var ol = _hyperscript_helpers_.ol;
+var optgroup = _hyperscript_helpers_.optgroup;
+var option = _hyperscript_helpers_.option;
+var p = _hyperscript_helpers_.p;
+var param = _hyperscript_helpers_.param;
+var pre = _hyperscript_helpers_.pre;
+var q = _hyperscript_helpers_.q;
+var rp = _hyperscript_helpers_.rp;
+var rt = _hyperscript_helpers_.rt;
+var ruby = _hyperscript_helpers_.ruby;
+var s = _hyperscript_helpers_.s;
+var samp = _hyperscript_helpers_.samp;
+var script = _hyperscript_helpers_.script;
+var section = _hyperscript_helpers_.section;
+var select = _hyperscript_helpers_.select;
+var small = _hyperscript_helpers_.small;
+var source = _hyperscript_helpers_.source;
+var span = _hyperscript_helpers_.span;
+var strong = _hyperscript_helpers_.strong;
+var style = _hyperscript_helpers_.style;
+var sub = _hyperscript_helpers_.sub;
+var sup = _hyperscript_helpers_.sup;
+var table = _hyperscript_helpers_.table;
+var tbody = _hyperscript_helpers_.tbody;
+var td = _hyperscript_helpers_.td;
+var textarea = _hyperscript_helpers_.textarea;
+var tfoot = _hyperscript_helpers_.tfoot;
+var th = _hyperscript_helpers_.th;
+var thead = _hyperscript_helpers_.thead;
+var title = _hyperscript_helpers_.title;
+var tr = _hyperscript_helpers_.tr;
+var u = _hyperscript_helpers_.u;
+var ul = _hyperscript_helpers_.ul;
+var video = _hyperscript_helpers_.video;
 
-var _thunk = require('./hyperscript/thunk');
-
-Object.defineProperty(exports, 'thunk', {
-  enumerable: true,
-  get: function get() {
-    return _thunk.thunk;
-  }
-});
-
-var _xsDom = require('./xs-dom');
-
-Object.defineProperty(exports, 'init', {
-  enumerable: true,
-  get: function get() {
-    return _xsDom.init;
-  }
-});
-
-var _hyperscript = require('./hyperscript/hyperscript');
-
-var _hyperscriptHelpers = require('./hyperscript/hyperscript-helpers');
-
-var _hyperscriptHelpers2 = _interopRequireDefault(_hyperscriptHelpers);
-
-var _svgHelpers = require('./hyperscript/svg-helpers');
-
-var _svgHelpers2 = _interopRequireDefault(_svgHelpers);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var a = _hyperscriptHelpers2.default.a;
-var abbr = _hyperscriptHelpers2.default.abbr;
-var address = _hyperscriptHelpers2.default.address;
-var area = _hyperscriptHelpers2.default.area;
-var article = _hyperscriptHelpers2.default.article;
-var aside = _hyperscriptHelpers2.default.aside;
-var audio = _hyperscriptHelpers2.default.audio;
-var b = _hyperscriptHelpers2.default.b;
-var base = _hyperscriptHelpers2.default.base;
-var bdi = _hyperscriptHelpers2.default.bdi;
-var bdo = _hyperscriptHelpers2.default.bdo;
-var blockquote = _hyperscriptHelpers2.default.blockquote;
-var body = _hyperscriptHelpers2.default.body;
-var br = _hyperscriptHelpers2.default.br;
-var button = _hyperscriptHelpers2.default.button;
-var canvas = _hyperscriptHelpers2.default.canvas;
-var caption = _hyperscriptHelpers2.default.caption;
-var cite = _hyperscriptHelpers2.default.cite;
-var code = _hyperscriptHelpers2.default.code;
-var col = _hyperscriptHelpers2.default.col;
-var colgroup = _hyperscriptHelpers2.default.colgroup;
-var dd = _hyperscriptHelpers2.default.dd;
-var del = _hyperscriptHelpers2.default.del;
-var dfn = _hyperscriptHelpers2.default.dfn;
-var dir = _hyperscriptHelpers2.default.dir;
-var div = _hyperscriptHelpers2.default.div;
-var dl = _hyperscriptHelpers2.default.dl;
-var dt = _hyperscriptHelpers2.default.dt;
-var em = _hyperscriptHelpers2.default.em;
-var embed = _hyperscriptHelpers2.default.embed;
-var fieldset = _hyperscriptHelpers2.default.fieldset;
-var figcaption = _hyperscriptHelpers2.default.figcaption;
-var figure = _hyperscriptHelpers2.default.figure;
-var footer = _hyperscriptHelpers2.default.footer;
-var form = _hyperscriptHelpers2.default.form;
-var h1 = _hyperscriptHelpers2.default.h1;
-var h2 = _hyperscriptHelpers2.default.h2;
-var h3 = _hyperscriptHelpers2.default.h3;
-var h4 = _hyperscriptHelpers2.default.h4;
-var h5 = _hyperscriptHelpers2.default.h5;
-var h6 = _hyperscriptHelpers2.default.h6;
-var head = _hyperscriptHelpers2.default.head;
-var header = _hyperscriptHelpers2.default.header;
-var hgroup = _hyperscriptHelpers2.default.hgroup;
-var hr = _hyperscriptHelpers2.default.hr;
-var html = _hyperscriptHelpers2.default.html;
-var i = _hyperscriptHelpers2.default.i;
-var iframe = _hyperscriptHelpers2.default.iframe;
-var img = _hyperscriptHelpers2.default.img;
-var input = _hyperscriptHelpers2.default.input;
-var ins = _hyperscriptHelpers2.default.ins;
-var kbd = _hyperscriptHelpers2.default.kbd;
-var keygen = _hyperscriptHelpers2.default.keygen;
-var label = _hyperscriptHelpers2.default.label;
-var legend = _hyperscriptHelpers2.default.legend;
-var li = _hyperscriptHelpers2.default.li;
-var link = _hyperscriptHelpers2.default.link;
-var main = _hyperscriptHelpers2.default.main;
-var map = _hyperscriptHelpers2.default.map;
-var mark = _hyperscriptHelpers2.default.mark;
-var menu = _hyperscriptHelpers2.default.menu;
-var meta = _hyperscriptHelpers2.default.meta;
-var nav = _hyperscriptHelpers2.default.nav;
-var noscript = _hyperscriptHelpers2.default.noscript;
-var object = _hyperscriptHelpers2.default.object;
-var ol = _hyperscriptHelpers2.default.ol;
-var optgroup = _hyperscriptHelpers2.default.optgroup;
-var option = _hyperscriptHelpers2.default.option;
-var p = _hyperscriptHelpers2.default.p;
-var param = _hyperscriptHelpers2.default.param;
-var pre = _hyperscriptHelpers2.default.pre;
-var q = _hyperscriptHelpers2.default.q;
-var rp = _hyperscriptHelpers2.default.rp;
-var rt = _hyperscriptHelpers2.default.rt;
-var ruby = _hyperscriptHelpers2.default.ruby;
-var s = _hyperscriptHelpers2.default.s;
-var samp = _hyperscriptHelpers2.default.samp;
-var script = _hyperscriptHelpers2.default.script;
-var section = _hyperscriptHelpers2.default.section;
-var select = _hyperscriptHelpers2.default.select;
-var small = _hyperscriptHelpers2.default.small;
-var source = _hyperscriptHelpers2.default.source;
-var span = _hyperscriptHelpers2.default.span;
-var strong = _hyperscriptHelpers2.default.strong;
-var style = _hyperscriptHelpers2.default.style;
-var sub = _hyperscriptHelpers2.default.sub;
-var sup = _hyperscriptHelpers2.default.sup;
-var table = _hyperscriptHelpers2.default.table;
-var tbody = _hyperscriptHelpers2.default.tbody;
-var td = _hyperscriptHelpers2.default.td;
-var textarea = _hyperscriptHelpers2.default.textarea;
-var tfoot = _hyperscriptHelpers2.default.tfoot;
-var th = _hyperscriptHelpers2.default.th;
-var thead = _hyperscriptHelpers2.default.thead;
-var title = _hyperscriptHelpers2.default.title;
-var tr = _hyperscriptHelpers2.default.tr;
-var u = _hyperscriptHelpers2.default.u;
-var ul = _hyperscriptHelpers2.default.ul;
-var video = _hyperscriptHelpers2.default.video;
-exports.h = _hyperscript.h;
 exports.a = a;
 exports.abbr = abbr;
 exports.address = address;
@@ -949,43 +856,33 @@ exports.tr = tr;
 exports.u = u;
 exports.ul = ul;
 exports.video = video;
-exports.svg = _svgHelpers2.default;
+var svg_helpers_1 = require('./hyperscript/svg-helpers');
+exports.svg = svg_helpers_1.default;
+var xs_dom_1 = require('./xs-dom');
+exports.init = xs_dom_1.init;
+
 
 },{"./hyperscript/hyperscript":8,"./hyperscript/hyperscript-helpers":7,"./hyperscript/svg-helpers":9,"./hyperscript/thunk":10,"./xs-dom":14}],12:[function(require,module,exports){
-'use strict';
+"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _parseSelector = require('./parseSelector');
-
-Object.defineProperty(exports, 'parseSelector', {
-    enumerable: true,
-    get: function get() {
-        return _parseSelector.parseSelector;
-    }
-});
-exports.isDef = isDef;
-exports.isUndef = isUndef;
-exports.emptyVNode = emptyVNode;
-exports.sameVNode = sameVNode;
-exports.createKeyToOldIdx = createKeyToOldIdx;
-exports.pluck = pluck;
-exports.forEach = forEach;
-exports.curry2 = curry2;
+var parseSelector_1 = require('./parseSelector');
+exports.parseSelector = parseSelector_1.parseSelector;
 function isDef(x) {
     return typeof x !== 'undefined';
 }
+exports.isDef = isDef;
 function isUndef(x) {
     return typeof x === 'undefined';
 }
+exports.isUndef = isUndef;
 function emptyVNode() {
     return { sel: '', data: {}, children: [], key: void 0, text: void 0 };
 }
+exports.emptyVNode = emptyVNode;
 function sameVNode(vNode1, vNode2) {
     return vNode1.key === vNode2.key && vNode1.sel === vNode2.sel;
 }
+exports.sameVNode = sameVNode;
 function createKeyToOldIdx(children, beginIdx, endIdx) {
     var map = {};
     var key = void 0;
@@ -995,6 +892,7 @@ function createKeyToOldIdx(children, beginIdx, endIdx) {
     }
     return map;
 }
+exports.createKeyToOldIdx = createKeyToOldIdx;
 function tryPluckProperty(obj, prop) {
     try {
         return obj[prop];
@@ -1015,12 +913,14 @@ function pluck() {
         return x;
     };
 }
+exports.pluck = pluck;
 function forEach(fn, array) {
     var l = array.length;
     for (var i = 0; i < l; ++i) {
         fn(array[i]);
     }
 }
+exports.forEach = forEach;
 function curry2(f) {
     function curried(a, b) {
         switch (arguments.length) {
@@ -1036,15 +936,12 @@ function curry2(f) {
     }
     return curried;
 }
+exports.curry2 = curry2;
 
 
 },{"./parseSelector":13}],13:[function(require,module,exports){
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.parseSelector = parseSelector;
 var classIdSplit = /([\.#]?[a-zA-Z0-9\u007F-\uFFFF_:-]+)/;
 var notClassId = /^\.|#/;
 function parseSelector() {
@@ -1080,47 +977,34 @@ function parseSelector() {
         className: classes.join(" ")
     };
 }
+exports.parseSelector = parseSelector;
 
 
 },{}],14:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.init = undefined;
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dom = require('./api/dom');
-
-var api = _interopRequireWildcard(_dom);
-
-var _index = require('./util/index');
-
-var _Callbacks = require('./Callbacks');
-
-var _ElementCreator = require('./ElementCreator');
-
-var _VNodePatcher = require('./VNodePatcher');
-
-var _VNode = require('./VNode');
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var api = require('./api/dom');
+var index_1 = require('./util/index');
+var Callbacks_1 = require('./Callbacks');
+var ElementCreator_1 = require('./ElementCreator');
+var VNodePatcher_1 = require('./VNodePatcher');
+var index_2 = require('./util/index');
+var VNode_1 = require('./VNode');
 function emptyVNodeAt(elm) {
-    return (0, _VNode.createVNode)({
+    return VNode_1.createVNode({
         sel: api.tagName(elm).toLowerCase(),
         elm: elm
     });
 }
-var init = exports.init = (0, _index.curry2)(function init(modules, rootElement) {
+exports.init = index_2.curry2(function init(modules, rootElement) {
     var insertedVNodeQueue = [];
-    var callbacks = new _Callbacks.Callbacks(modules);
-    var elementCreator = new _ElementCreator.ElementCreator(insertedVNodeQueue, callbacks);
-    var vNodePatcher = new _VNodePatcher.VNodePatcher(elementCreator, callbacks);
+    var callbacks = new Callbacks_1.Callbacks(modules);
+    var elementCreator = new ElementCreator_1.ElementCreator(insertedVNodeQueue, callbacks);
+    var vNodePatcher = new VNodePatcher_1.VNodePatcher(elementCreator, callbacks);
     var vNode = emptyVNodeAt(rootElement);
     return new XSDOM(insertedVNodeQueue, callbacks, elementCreator, vNodePatcher, vNode);
 });
@@ -1141,7 +1025,7 @@ var XSDOM = function () {
         value: function patch(vNode) {
             var oldVNode = this.oldVNode;
             this.callbacks.pre();
-            if ((0, _index.sameVNode)(oldVNode, vNode)) {
+            if (index_1.sameVNode(oldVNode, vNode)) {
                 vNode = this.vNodePatcher.patch(oldVNode, vNode);
             } else {
                 var parent = api.parentNode(oldVNode.elm);
