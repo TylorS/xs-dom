@@ -61,7 +61,6 @@
     "release-major": "git checkout master && release major && npm publish --access=public"
   },
   "dependencies": {
-    "browser-split": "0.0.1",
-    "xstream": "^2.0.2"
+    "browser-split": "0.0.1"
   }
 }
