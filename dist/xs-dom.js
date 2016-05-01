@@ -9,15 +9,19 @@ var index_1 = require('./util/index');
 var api = require('./api/dom');
 var hooks = ['create', 'update', 'remove', 'destroy', 'pre', 'post'];
 function registerModules(modules) {
-    var callbacks = {};
-    for (var i = 0; i < hooks.length; ++i) {
-        callbacks[hooks[i]] = [];
-        for (var j = 0; j < modules.length; ++j) {
-            if (modules[j][hooks[i]] !== void 0) {
-                callbacks[hooks[i]].push(modules[j][hooks[i]]);
-            }
-        }
-    }
+    var callbacks = {
+        create: [],
+        update: [],
+        remove: [],
+        destroy: [],
+        pre: [],
+        post: []
+    };
+    index_1.forEach(function (hook) {
+        return index_1.forEach(function (module) {
+            if (module[hook]) callbacks[hook].push(module[hook]);
+        }, modules);
+    }, hooks);
     return callbacks;
 }
 function createRemoveCallback(childElm, listeners) {
@@ -40,49 +44,37 @@ var Callbacks = function () {
     _createClass(Callbacks, [{
         key: 'pre',
         value: function pre() {
-            for (var i = 0; i < this.callbacks.pre.length; ++i) {
-                this.callbacks.pre[i]();
-            }
+            index_1.forEach(function (fn) {
+                return fn();
+            }, this.callbacks.pre);
         }
     }, {
         key: 'create',
         value: function create(vNode) {
-            var create = this.callbacks.create;
-            var length = create.length;
-            if (length === 1) {
-                create[0](index_1.emptyVNode(), vNode);
-                return;
-            }
-            for (var i = 0; i < length; ++i) {
-                create[i](index_1.emptyVNode(), vNode);
-            }
+            index_1.forEach(function (fn) {
+                return fn(index_1.emptyVNode(), vNode);
+            }, this.callbacks.create);
         }
     }, {
         key: 'update',
         value: function update(oldVNode, vNode) {
-            var update = this.callbacks.update;
-            var length = update.length;
-            if (length === 1) {
-                update[0](oldVNode, vNode);
-                return;
-            }
-            for (var i = 0; i < this.callbacks.update.length; ++i) {
-                update[i](oldVNode, vNode);
-            }
+            index_1.forEach(function (fn) {
+                return fn(oldVNode, vNode);
+            }, this.callbacks.update);
         }
     }, {
         key: 'insert',
         value: function insert(insertedVNodeQueue) {
-            for (var i = 0; i < insertedVNodeQueue.length; ++i) {
-                insertedVNodeQueue[i].data.hook.insert(insertedVNodeQueue[i]);
-            }
+            index_1.forEach(function (vNode) {
+                return vNode.data.hook.insert(vNode);
+            }, insertedVNodeQueue);
         }
     }, {
         key: 'remove',
         value: function remove(vNode, _remove) {
-            for (var i = 0; i < this.callbacks.remove.length; ++i) {
-                this.callbacks.remove[i](vNode, _remove);
-            }
+            index_1.forEach(function (fn) {
+                return fn(vNode, _remove);
+            }, this.callbacks.remove);
         }
     }, {
         key: 'getListeners',
@@ -92,16 +84,16 @@ var Callbacks = function () {
     }, {
         key: 'destroy',
         value: function destroy(vNode) {
-            for (var i = 0; i < this.callbacks.destroy.length; ++i) {
-                this.callbacks.destroy[i](vNode);
-            }
+            index_1.forEach(function (fn) {
+                return fn(vNode);
+            }, this.callbacks.destroy);
         }
     }, {
         key: 'post',
         value: function post() {
-            for (var i = 0; i < this.callbacks.post.length; ++i) {
-                this.callbacks.post[i]();
-            }
+            index_1.forEach(function (fn) {
+                return fn();
+            }, this.callbacks.post);
         }
     }]);
 
@@ -187,19 +179,13 @@ exports.ElementCreator = ElementCreator;
 },{"./api/dom":6,"./util/index":12}],3:[function(require,module,exports){
 "use strict";
 
-function createVNode(_ref) {
-    var sel = _ref.sel;
-    var _ref$data = _ref.data;
-    var data = _ref$data === undefined ? {} : _ref$data;
-    var _ref$children = _ref.children;
-    var children = _ref$children === undefined ? void 0 : _ref$children;
-    var _ref$elm = _ref.elm;
-    var elm = _ref$elm === undefined ? void 0 : _ref$elm;
-    var _ref$text = _ref.text;
-    var text = _ref$text === undefined ? void 0 : _ref$text;
-
+function createVNode(vNode) {
+    var data = vNode.data || {};
+    var children = vNode.children || void 0;
+    var elm = vNode.elm || void 0;
+    var text = vNode.text || void 0;
     var key = data === void 0 ? void 0 : data.key;
-    return { sel: sel, data: data, children: children, elm: elm, text: text, key: key };
+    return { sel: vNode.sel, data: data, children: children, elm: elm, text: text, key: key };
 }
 exports.createVNode = createVNode;
 function createTextVNode(text) {
