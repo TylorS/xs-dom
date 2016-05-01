@@ -36,15 +36,13 @@ export interface Thunk extends VNode {
   data: ThunkData;
 }
 
-export function createVNode({
-  sel,
-  data = {},
-  children = void 0,
-  elm = void 0,
-  text = void 0,
-}: VNode): VNode {
+export function createVNode(vNode: VNode): VNode {
+  const data = vNode.data || {};
+  const children = vNode.children || void 0;
+  const elm = vNode.elm || void 0;
+  const text = vNode.text || void 0;
   const key = data === void 0 ? void 0 : (<any> data).key;
-  return {sel, data, children, elm, text, key};
+  return {sel: vNode.sel, data, children, elm, text, key};
 }
 
 export function createTextVNode(text: string): VNode {
