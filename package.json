@@ -59,8 +59,5 @@
     "release-patch": "git checkout master && release patch && npm publish --access=public",
     "release-minor": "git checkout master && release minor && npm publish --access=public",
     "release-major": "git checkout master && release major && npm publish --access=public"
-  },
-  "dependencies": {
-    "browser-split": "0.0.1"
   }
 }
