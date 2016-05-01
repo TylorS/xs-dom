@@ -8,7 +8,7 @@ import {
   PreHook,
   PostHook} from './Module';
 
-import {emptyVNode} from './util/index';
+import {emptyVNode, forEach} from './util/index';
 import * as api from './api/dom';
 
 const hooks = ['create', 'update', 'remove', 'destroy', 'pre', 'post'];
@@ -23,16 +23,18 @@ interface CallbacksInterface {
 }
 
 function registerModules(modules: Array<Module>): CallbacksInterface {
-  const callbacks = {};
+  const callbacks: CallbacksInterface = {
+    create: [],
+    update: [],
+    remove: [],
+    destroy: [],
+    pre: [],
+    post: [],
+  };
 
-  for (let i = 0; i < hooks.length; ++i) {
-    callbacks[hooks[i]] = [];
-    for (let j = 0; j < modules.length; ++j) {
-      if (modules[j][hooks[i]] !== void 0) {
-        callbacks[hooks[i]].push( modules[j][hooks[i]] );
-      }
-    }
-  }
+  forEach(hook => forEach(module => {
+    if (module[hook]) callbacks[hook].push(module[hook]);
+  }, modules), hooks);
 
   return callbacks;
 }
@@ -55,43 +57,23 @@ export class Callbacks {
   }
 
   pre () {
-    for (let i = 0; i < this.callbacks.pre.length; ++i) {
-      this.callbacks.pre[i]();
-    }
+    forEach((fn: PreHook) => fn(), this.callbacks.pre);
   }
 
   create (vNode: VNode) {
-    const create = this.callbacks.create;
-    const length = create.length;
-
-    if (length === 1) { create[0](emptyVNode(), vNode); return ; }
-
-    for (let i = 0; i < length; ++i) {
-      create[i](emptyVNode(), vNode);
-    }
+    forEach((fn: CreateHook) => fn(emptyVNode(), vNode), this.callbacks.create);
   }
 
   update (oldVNode: VNode, vNode: VNode) {
-    const update = this.callbacks.update;
-    const length = update.length;
-
-    if (length === 1) { update[0](oldVNode, vNode); return; }
-
-    for (let i = 0; i < this.callbacks.update.length; ++i) {
-      update[i](oldVNode, vNode);
-    }
+    forEach((fn: UpdateHook) => fn(oldVNode, vNode), this.callbacks.update);
   }
 
   insert (insertedVNodeQueue: VNode[]) {
-    for (let i = 0; i < insertedVNodeQueue.length; ++i) {
-      insertedVNodeQueue[i].data.hook.insert(insertedVNodeQueue[i]);
-    }
+    forEach((vNode: VNode) => vNode.data.hook.insert(vNode), insertedVNodeQueue);
   }
 
   remove (vNode: VNode, remove: () => void): void {
-    for (let i = 0; i < this.callbacks.remove.length; ++i) {
-      this.callbacks.remove[i](vNode, remove);
-    }
+    forEach((fn: RemoveHook) => fn(vNode, remove), this.callbacks.remove);
   }
 
   getListeners(): number {
@@ -99,14 +81,11 @@ export class Callbacks {
   }
 
   destroy (vNode: VNode) {
-    for (let i = 0; i < this.callbacks.destroy.length; ++i) {
-      this.callbacks.destroy[i](vNode);
-    }
+    forEach((fn: DestroyHook) => fn(vNode), this.callbacks.destroy);
   }
 
   post () {
-    for (let i = 0; i < this.callbacks.post.length; ++i) {
-      this.callbacks.post[i]();
-    }
+    forEach((fn: PostHook) => fn(), this.callbacks.post);
+
   }
 }
