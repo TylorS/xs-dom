@@ -44,7 +44,7 @@ typings/
 *.js
 *.js.map
 *.d.ts
-module/
-api/
-hyperscript/
-util/
+./module/
+./api/
+./hyperscript/
+./util/
