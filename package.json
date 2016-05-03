@@ -4,6 +4,10 @@
   "description": "A boilerplate for Cycle.js libraries written in TypeScript",
   "main": "index.js",
   "typings": "index.d.ts",
+  "files": [
+    "*.js",
+    "module/"
+  ],
   "directories": {
     "test": "test"
   },
@@ -53,7 +57,7 @@
     "dist": "browserify -t babelify lib/index.js --standalone xsDom -o dist/xs-dom.js",
     "postdist": "uglifyjs dist/xs-dom.js -o dist/xs-dom.min.js",
     "start": "npm install && npm prune",
-    "postinstall": "typings install",
+    "prelib": "typings install",
     "preversion": "npm run dist && git add dist/ && git commit -m 'chore(dist): build dist/'",
     "prerelease": "npm run lib",
     "release": "npm run release-patch",
