@@ -1,6 +1,6 @@
 {
   "name": "xs-dom",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A boilerplate for Cycle.js libraries written in TypeScript",
   "main": "index.js",
   "typings": "index.d.ts",
@@ -56,6 +56,7 @@
     "start": "npm install && npm prune",
     "prelib": "typings install",
     "preversion": "npm run dist && git add dist/ && git commit -m 'chore(dist): build dist/'",
+    "prepublish": "npm run lib",
     "prerelease": "npm run lib",
     "release": "npm run release-patch",
     "release-patch": "git checkout master && release patch && npm publish --access=public",
