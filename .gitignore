@@ -39,3 +39,12 @@ typings/
 # editor specific directories
 .idea
 .vscode
+
+# build files
+*.js
+*.js.map
+*.d.ts
+module/
+api/
+hyperscript/
+util/

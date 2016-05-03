@@ -7,8 +7,8 @@
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "module": "commonjs",
-    "target": "ES6",
-    "outDir": "lib/"
+    "target": "ES5",
+    "outDir": "./"
   },
   "formatCodeOptions": {
     "indentSize": 2,

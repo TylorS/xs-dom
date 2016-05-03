@@ -2,8 +2,8 @@
   "name": "xs-dom",
   "version": "0.0.4",
   "description": "A boilerplate for Cycle.js libraries written in TypeScript",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "index.js",
+  "typings": "index.d.ts",
   "directories": {
     "test": "test"
   },
@@ -41,6 +41,7 @@
     }
   },
   "scripts": {
+    "clean": "rm -rf api/ && rm -rf hyperscript/ && rm -rf module/ && rm -rf util/ && rm -f *.js && rm -f *.js.map && rm -f *.d.ts",
     "lint": "tslint -c tslint.json src/*.ts src/**/*.ts",
     "test-node": "mocha test/node/*.ts test/node/**/*.ts --require ts-node/register && rm -rf test/node/**/*.js",
     "build-browser-tests": "./node_modules/.bin/tsc --module es2015 --target ES6 ./typings/main.d.ts test/browser/index.ts --outDir ./test/browser/build && ./node_modules/.bin/browserify -t babelify test/browser/build/test/browser/index.js -o test/bundle.js",
