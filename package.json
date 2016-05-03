@@ -4,11 +4,6 @@
   "description": "A boilerplate for Cycle.js libraries written in TypeScript",
   "main": "index.js",
   "typings": "index.d.ts",
-  "files": [
-    "index.js",
-    "*.js",
-    "module/"
-  ],
   "directories": {
     "test": "test"
   },
