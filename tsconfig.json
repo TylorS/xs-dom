@@ -32,10 +32,8 @@
     "src/module/properties.ts",
     "src/module/style.ts",
     "src/util/index.ts",
-    "src/util/parseSelector.ts",
     "src/VNode.ts",
     "src/VNodePatcher.ts",
-    "src/VNodeUpdater.ts",
     "src/xs-dom.ts"
   ],
   "filesGlob": [

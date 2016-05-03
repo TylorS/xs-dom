@@ -1,7 +1,5 @@
 import {VNode, VNodeData} from '../VNode';
 
-export {parseSelector} from './parseSelector';
-
 export function isDef (x: any): boolean {
   return typeof x !== 'undefined';
 }
@@ -28,21 +26,15 @@ export function createKeyToOldIdx(children: VNodeData[], beginIdx: number, endId
   return map;
 }
 
-function tryPluckProperty(obj: Object, prop: string): any {
-  try {
-    return obj[prop];
-  } catch (e) {
-    return void 0;
-  }
-}
-
 export function pluck(...args: string[]) {
+  let a: any;
   return function plucker(obj: Object): any {
-    let x = obj;
-    for (let i = 0, l = args.length; i < l; ++i) {
-      x = tryPluckProperty(x, args[i]);
+    switch (args.length) {
+    case 0: return obj;
+    case 1: return obj[args[0]] || void 0;
+    case 2: a = obj[args[0]]; return isDef(a) ? a[args[1]] : void 0;
+    default: throw Error('Too many arguments');
     }
-    return x;
   };
 }
 
