@@ -1,10 +1,11 @@
 {
   "name": "xs-dom",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A boilerplate for Cycle.js libraries written in TypeScript",
   "main": "index.js",
   "typings": "index.d.ts",
   "files": [
+    "index.js",
     "*.js",
     "module/"
   ],
@@ -37,7 +38,8 @@
     "typescript": "^1.8.10",
     "typings": "^0.8.1",
     "uglify-js": "^2.6.2",
-    "validate-commit-message": "^3.0.1"
+    "validate-commit-message": "^3.0.1",
+    "xstream": "^2.2.0"
   },
   "config": {
     "ghooks": {
